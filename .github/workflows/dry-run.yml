@@ -3,6 +3,9 @@
 name: dry-run
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_call:
 
 permissions:
@@ -85,6 +88,7 @@ jobs:
         with:
           package: components
           target_artifact: components-package
+          artifact_path: ./*.tgz
           skip_tests: true
           download_dependencies: true
 
@@ -103,7 +107,7 @@ jobs:
         with:
           name: components-package
       - name: Unpack components artifacts
-        run: tar -xzf components.tgz
+        run: tar -xzf components-full.tgz
       - name: Unit tests
         run: npm run test:unit
 
@@ -122,7 +126,7 @@ jobs:
         with:
           name: components-package
       - name: Unpack components artifacts
-        run: tar -xzf components.tgz
+        run: tar -xzf components-full.tgz
       - name: Integration tests
         run: npm run test:integ
 
@@ -141,6 +145,27 @@ jobs:
         with:
           name: components-package
       - name: Unpack components artifacts
-        run: tar -xzf components.tgz
+        run: tar -xzf components-full.tgz
       - name: Accessibility tests
         run: npm run test:a11y
+  
+  demosTest:
+    name: Demos tests
+    runs-on: ubuntu-latest
+    needs:
+      - buildComponents
+      - buildBrowserTestTools
+      - buildCollectionHooks
+      - buildTestUtils
+      - buildGlobalStyles
+      - buildThemingCore
+    steps:
+      - name: Download component artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: components-package
+      - name: Build
+        uses: cloudscape-design/.github/.github/actions/build-package@main
+        with:
+          package: demos
+          download_dependencies: true
