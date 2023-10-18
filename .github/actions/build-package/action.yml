@@ -1,26 +1,26 @@
-name: "Build dependency package locally"
-description: "Checks out a dependency package locally and updates all references to it"
+name: Build dependency package locally
+description: Checks out a dependency package locally and updates all references to it
 inputs:
   package:
-    description: "Name of the package"
+    description: Name of the package
     required: true
   download_dependencies:
-    description: "Whether to download dependencies"
-    default: "false"
+    description: Whether to download dependencies
+    default: false
   skip_build:
-    description: "Whether to skip the build"
-    default: "false"
+    description: Whether to skip the build
+    default: false
   skip_tests:
-    description: "Whether to skip the tests"
-    default: "false"
+    description: Whether to skip the tests
+    default: false
   target_artifact:
-    description: "Name of the artifact that will be uploaded"
-    default: "dependencies"
+    description: Name of the artifact that will be uploaded
+    default: dependencies
   artifact_path:
-    description: "Path or pattern for the artifact files that should be uploaded"
+    description: Path or pattern for the artifact files that should be uploaded
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Clone
       uses: actions/checkout@v3
@@ -41,7 +41,7 @@ runs:
     - run: cd ${{ inputs.package }}
       shell: bash
 
-    - uses: cloudscape-design/.github/.github/actions/patch-local-dependencies@main
+    - uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@new-with-node18
       with:
         path: ${{ github.workspace }}/${{ inputs.package }}
 

@@ -70,14 +70,20 @@ function updateDependencyVersions(dependencies, newVersion, sourcePackageName) {
       }
 
       // Don't touch this local lerna dependency in test-utils-converter
-      if (sourcePackageName === '@cloudscape-design/test-utils-converter' && packageName === '@cloudscape-design/test-utils-core') {
+      if (
+        sourcePackageName === '@cloudscape-design/test-utils-converter' &&
+        packageName === '@cloudscape-design/test-utils-core'
+      ) {
         return;
       }
 
       const nextVersion = typeof newVersion === 'function' ? newVersion(packageName) : newVersion;
 
       if (isPackageLock) {
-        updatedDependencies[packageName] = { ...dependencies[packageName], version: nextVersion };
+        updatedDependencies[packageName] = {
+          ...dependencies[packageName],
+          version: nextVersion,
+        };
 
         // Remove some additional keys for package-lock.json files
         delete updatedDependencies[packageName].resolved;

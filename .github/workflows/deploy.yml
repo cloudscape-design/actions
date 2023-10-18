@@ -5,12 +5,12 @@ on:
     inputs:
       artifact-name:
         type: string
-        description: "Name of artifact to deploy"
+        description: Name of artifact to deploy
         required: true
       deployment-path:
         type: string
-        description: "Directory of assets to upload"
-        default: "."
+        description: Directory of assets to upload
+        default: '.'
 
 permissions:
   id-token: write
@@ -32,7 +32,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_PREVIEW_ROLE_ARN }}
           aws-region: us-west-2
       - name: Download artifact
-        uses: cloudscape-design/.github/.github/actions/download-artifact@main
+        uses: cloudscape-design/actions/.github/actions/download-artifact@new-with-node18
         with:
           name: ${{ inputs.artifact-name }}
           path: build
