@@ -32,7 +32,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_PREVIEW_ROLE_ARN }}
           aws-region: us-west-2
       - name: Download artifact
-        uses: ./.github/actions/download-artifact.yml
+        uses: ./.github/actions/download-artifact
         with:
           name: ${{ inputs.artifact-name }}
           path: build

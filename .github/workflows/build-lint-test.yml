@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 18
       - name: Unlock dependencies
-        uses: ./.github/actions/unlock-dependencies.yml
+        uses: ./.github/actions/unlock-dependencies
       - run: npm i --force
       - run: npm run build
       - run: npm run lint
@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.repository == 'cloudscape-design/components' }}
       - name: Upload Artifacts
         if: ${{ inputs.artifact-path != '' }}
-        uses: ./.github/actions/upload-artifact.yml
+        uses: ./.github/actions/upload-artifact
         with:
           path: ${{ inputs.artifact-path }}
           name: ${{ inputs.artifact-name }}

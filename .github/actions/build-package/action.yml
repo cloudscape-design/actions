@@ -41,7 +41,7 @@ runs:
     - run: cd ${{ inputs.package }}
       shell: bash
 
-    - uses: ./.github/actions/patch-local-dependencies.yml
+    - uses: ./.github/actions/patch-local-dependencies
       with:
         path: ${{ github.workspace }}/${{ inputs.package }}
 
