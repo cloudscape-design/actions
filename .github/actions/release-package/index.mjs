@@ -5,9 +5,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 const inputs = {
   path: process.env.INPUT_PATH,
   suffix: process.env.INPUT_SUFFIX,
-  publishPackages: process.env.PUBLISH_PACKAGES
-    ? process.env.PUBLISH_PACKAGES.split(',').map((pkg) => pkg.trim())
-    : null,
+  publishPackages: process.env.PUBLISH_PACKAGES ? process.env.PUBLISH_PACKAGES.split(',').map(pkg => pkg.trim()) : null,
   commitSha: process.env.COMMIT_SHA,
 };
 
@@ -17,8 +15,7 @@ console.log(JSON.stringify(inputs, null, 2));
 const internalFolderName = 'internal';
 
 // The main branch should publish to next, and dev forks to next-dev
-const branchName =
-  process.env.GITHUB_REF_TYPE === 'branch' ? process.env.GITHUB_REF_NAME : '';
+const branchName = process.env.GITHUB_REF_TYPE === 'branch' ? process.env.GITHUB_REF_NAME : '';
 const publishTag = branchName.startsWith('dev-v3-') ? branchName : 'next';
 
 function releasePackage(packagePath) {
@@ -36,9 +33,7 @@ function releasePackage(packagePath) {
   writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
   // Publish to CodeArtifact
-  console.info(
-    `Publishing package ${packageJson.name} version ${packageJson.version} to dist-tag ${publishTag}`,
-  );
+  console.info(`Publishing package ${packageJson.name} version ${packageJson.version} to dist-tag ${publishTag}`);
 
   execSync(`npm publish --tag ${publishTag}`, {
     stdio: 'inherit',
@@ -48,10 +43,7 @@ function releasePackage(packagePath) {
 
 function addManifest(data, packagePath) {
   mkdirSync(path.join(packagePath, internalFolderName), { recursive: true });
-  writeFileSync(
-    path.join(packagePath, internalFolderName, 'manifest.json'),
-    JSON.stringify(data, null, 2),
-  );
+  writeFileSync(path.join(packagePath, internalFolderName, 'manifest.json'), JSON.stringify(data, null, 2));
 }
 
 function main() {

@@ -5,7 +5,7 @@ inputs:
     description: Root directory of the package that should be updated
     required: true
   type:
-    description: How the dependencies should change. Possible values: "local" (to consume local tarballs), and "next" (to consume from pre-release CodeArtifact)
+    description: 'How the dependencies should change. Possible values: "local" (to consume local tarballs), and "next" (to consume from pre-release CodeArtifact)'
     default: local
     required: false
 runs:
