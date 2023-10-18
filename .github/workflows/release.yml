@@ -24,7 +24,7 @@ jobs:
     concurrency: release-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -50,6 +50,6 @@ jobs:
           aws codeartifact login --tool npm --repository $CODE_ARTIFACT_REPO --domain awsui --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region us-west-2 --namespace @cloudscape-design
 
       - name: Release package to private CodeArtifact
-        uses: cloudscape-design/.github/.github/actions/release-package@main
+        uses: ./.github/actions/release-package.yml
         with:
           publish-packages: ${{ inputs.publish-packages }}

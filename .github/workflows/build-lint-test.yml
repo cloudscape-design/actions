@@ -30,13 +30,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: Unlock dependencies
-        uses: cloudscape-design/.github/.github/actions/unlock-dependencies@main
+        uses: ./.github/actions/unlock-dependencies.yml
       - run: npm i --force
       - run: npm run build
       - run: npm run lint
@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.repository == 'cloudscape-design/components' }}
       - name: Upload Artifacts
         if: ${{ inputs.artifact-path != '' }}
-        uses: cloudscape-design/.github/.github/actions/upload-artifact@main
+        uses: ./.github/actions/upload-artifact.yml
         with:
           path: ${{ inputs.artifact-path }}
           name: ${{ inputs.artifact-name }}
@@ -61,7 +61,7 @@ jobs:
     if: ${{ inputs.skip-codeql == false }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:

@@ -25,7 +25,7 @@ jobs:
         run: echo ::set-output name=manifest::$(cat node_modules/${{ github.event.inputs.npm_package }}/internal/manifest.json)
         shell: bash
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ fromJson(steps.manifest.outputs.manifest).commit }}
           fetch-depth: 0

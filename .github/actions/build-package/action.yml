@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
     - name: Clone
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: cloudscape-design/${{ inputs.package }}
         path: ${{ inputs.package }}
@@ -41,7 +41,7 @@ runs:
     - run: cd ${{ inputs.package }}
       shell: bash
 
-    - uses: cloudscape-design/.github/.github/actions/patch-local-dependencies@main
+    - uses: ./.github/actions/patch-local-dependencies.yml
       with:
         path: ${{ github.workspace }}/${{ inputs.package }}
 
