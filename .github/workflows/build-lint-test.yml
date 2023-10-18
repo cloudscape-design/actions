@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 18
       - name: Unlock dependencies
-        uses: cloudscape-design/actions/.github/actions/unlock-dependencies@new-with-node18
+        uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
       - run: npm i --force
       - run: npm run build
       - run: npm run lint
@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.repository == 'cloudscape-design/components' }}
       - name: Upload Artifacts
         if: ${{ inputs.artifact-path != '' }}
-        uses: cloudscape-design/actions/.github/actions/upload-artifact@new-with-node18
+        uses: cloudscape-design/actions/.github/actions/upload-artifact@main
         with:
           path: ${{ inputs.artifact-path }}
           name: ${{ inputs.artifact-name }}
