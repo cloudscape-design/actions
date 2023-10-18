@@ -5,11 +5,11 @@ on:
     inputs:
       version:
         required: true
-        description: "Specify the version for this release"
+        description: Specify the version for this release
         type: string
       npm_package:
         required: true
-        description: "npm package of the release"
+        description: npm package of the release
         type: string
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
         run: echo ::set-output name=manifest::$(cat node_modules/${{ github.event.inputs.npm_package }}/internal/manifest.json)
         shell: bash
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: ${{ fromJson(steps.manifest.outputs.manifest).commit }}
           fetch-depth: 0

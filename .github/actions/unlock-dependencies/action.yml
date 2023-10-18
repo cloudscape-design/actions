@@ -1,8 +1,8 @@
-name: "Unlock Cloudscape dependencies in package-lock"
-description: "Removes all @cloudscape-design dependencies from package-lock file"
+name: Unlock Cloudscape dependencies in package-lock
+description: Removes all @cloudscape-design dependencies from package-lock file
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Setup Node.js
       uses: actions/setup-node@v3

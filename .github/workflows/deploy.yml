@@ -5,12 +5,12 @@ on:
     inputs:
       artifact-name:
         type: string
-        description: "Name of artifact to deploy"
+        description: Name of artifact to deploy
         required: true
       deployment-path:
         type: string
-        description: "Directory of assets to upload"
-        default: "."
+        description: Directory of assets to upload
+        default: '.'
 
 permissions:
   id-token: write

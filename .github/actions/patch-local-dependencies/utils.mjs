@@ -12,7 +12,7 @@ function findPackageFiles(directory) {
     return [];
   }
 
-  ['package.json', 'package-lock.json'].forEach(fileName => {
+  ['package.json', 'package-lock.json'].forEach((fileName) => {
     const packageJson = path.join(directory, fileName);
     if (fs.existsSync(packageJson)) {
       files.push(packageJson);
@@ -37,7 +37,7 @@ function findAllPackageJsons() {
 
   const subPackagesPath = path.join(inputs.path, 'packages');
   if (fs.existsSync(subPackagesPath)) {
-    fs.readdirSync(subPackagesPath).forEach(fileName => {
+    fs.readdirSync(subPackagesPath).forEach((fileName) => {
       const filePath = path.join(subPackagesPath, fileName);
       if (fs.statSync(filePath).isDirectory()) {
         const packageJsons = findPackageFiles(filePath);
@@ -59,10 +59,12 @@ function updateDependencyVersions(dependencies, newVersion, sourcePackageName) {
   const updatedDependencies = {};
 
   Object.keys(dependencies)
-    .filter(packageName => packageName.startsWith('@cloudscape-design/'))
-    .forEach(packageName => {
+    .filter((packageName) => packageName.startsWith('@cloudscape-design/'))
+    .forEach((packageName) => {
       const isPackageLock = typeof dependencies[packageName] !== 'string';
-      const previousVersion = isPackageLock ? dependencies[packageName].version : dependencies[packageName];
+      const previousVersion = isPackageLock
+        ? dependencies[packageName].version
+        : dependencies[packageName];
 
       // Skip local file dependencies
       if (previousVersion.startsWith('file:')) {
@@ -70,14 +72,21 @@ function updateDependencyVersions(dependencies, newVersion, sourcePackageName) {
       }
 
       // Don't touch this local lerna dependency in test-utils-converter
-      if (sourcePackageName === '@cloudscape-design/test-utils-converter' && packageName === '@cloudscape-design/test-utils-core') {
+      if (
+        sourcePackageName === '@cloudscape-design/test-utils-converter' &&
+        packageName === '@cloudscape-design/test-utils-core'
+      ) {
         return;
       }
 
-      const nextVersion = typeof newVersion === 'function' ? newVersion(packageName) : newVersion;
+      const nextVersion =
+        typeof newVersion === 'function' ? newVersion(packageName) : newVersion;
 
       if (isPackageLock) {
-        updatedDependencies[packageName] = { ...dependencies[packageName], version: nextVersion };
+        updatedDependencies[packageName] = {
+          ...dependencies[packageName],
+          version: nextVersion,
+        };
 
         // Remove some additional keys for package-lock.json files
         delete updatedDependencies[packageName].resolved;
@@ -92,12 +101,16 @@ function updateDependencyVersions(dependencies, newVersion, sourcePackageName) {
 
 export function updatePackageJsons(newVersion) {
   const packageJsons = findAllPackageJsons();
-  packageJsons.forEach(filePath => {
+  packageJsons.forEach((filePath) => {
     const packageJson = JSON.parse(fs.readFileSync(filePath));
     const packageName = packageJson.name;
 
-    ['dependencies', 'devDependencies'].forEach(dependencyKey => {
-      const newDeps = updateDependencyVersions(packageJson[dependencyKey], newVersion, packageName);
+    ['dependencies', 'devDependencies'].forEach((dependencyKey) => {
+      const newDeps = updateDependencyVersions(
+        packageJson[dependencyKey],
+        newVersion,
+        packageName,
+      );
       packageJson[dependencyKey] = newDeps;
     });
 

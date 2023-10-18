@@ -1,13 +1,13 @@
-name: "Publish package to internal CodeArtifact"
-description: "Publishes the current package to an internal CodeArtifact on a pre-release tag"
+name: Publish package to internal CodeArtifact
+description: Publishes the current package to an internal CodeArtifact on a pre-release tag
 inputs:
   publish-packages:
     # Arrays are not supported: https://github.com/community/community/discussions/11692
-    description: "Comma-separated list of sub-folders to publish"
+    description: Comma-separated list of sub-folders to publish
     required: false
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Setup Node.js
       uses: actions/setup-node@v3

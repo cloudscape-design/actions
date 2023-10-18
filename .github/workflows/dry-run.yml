@@ -23,7 +23,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@new-with-node18
         with:
           package: jest-preset
-          skip_build: "true"
+          skip_build: true
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@new-with-node18
         with:
           package: test-utils
-          download_dependencies: "true"
+          download_dependencies: true
   buildThemingCore:
     name: Build theming-core
     runs-on: ubuntu-latest
