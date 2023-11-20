@@ -8,5 +8,5 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
-    - run: TOKEN=${{inputs.token}} REPO=${{inputs.repo}} node ${{ github.action_path }}/index.js
+    - run: TOKEN=${{inputs.token}} REPO=${{inputs.repo}} node ${{ github.action_path }}/index.mjs
       shell: bash
