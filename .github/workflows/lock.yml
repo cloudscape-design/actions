@@ -15,7 +15,7 @@ jobs:
   discussion:
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/lock_discussions@main
+      - uses: cloudscape-design/actions/.github/actions/lock-discussion@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: ${{inputs.repository}}
