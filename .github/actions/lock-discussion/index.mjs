@@ -1,8 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import fetch from "node-fetch";
+//import fetch from "node-fetch";
 import { graphql } from "@octokit/graphql"
-global.fetch = fetch;
+//global.fetch = fetch;
 
 const graphqlWithAuth = graphql.defaults({
   headers: {

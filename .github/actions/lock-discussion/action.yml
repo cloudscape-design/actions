@@ -4,9 +4,11 @@ description: Locks answered discussions
 runs:
   using: composite
   steps:
-    - name: Use Node.js 18
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 18
+    - name: Setup GraphQL API
+      uses: octokit/graphql@v7
     - run: TOKEN=${{inputs.token}} REPO=${{inputs.repo}} node ${{ github.action_path }}/index.mjs
       shell: bash
