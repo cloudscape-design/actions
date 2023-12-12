@@ -11,6 +11,10 @@ on:
         required: true
         description: npm package of the release
         type: string
+      commit:
+        required: false
+        description: commit to generate release notes
+        type: string
 
 jobs:
   release:
