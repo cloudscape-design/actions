@@ -7,10 +7,6 @@ on:
         required: true
         description: npm version for this release
         type: string
-      npm_package:
-        required: false
-        description: npm package of the release
-        type: string
       commit:
         required: true
         description: commit to generate release notes
