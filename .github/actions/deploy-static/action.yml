@@ -1,0 +1,40 @@
+name: Deploy static assets
+description: Deploys desired path for preview in a pull request
+
+inputs:
+  role-to-assume:
+    description: Role to use for deployment
+    required: true
+  deployment-bucket:
+    description: Buket to deploy
+    required: true
+  source-path:
+    description: Directory to deploy
+    required: true
+  target-path:
+    description: Path prefix on the deployment URL
+    required: true
+
+outputs:
+  preview-url:
+    description: URL of the deployed artifacts
+    value: https://d21d5uik3ws71m.cloudfront.net/${{ steps.deployment-path.outputs.deployment-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ inputs.role-to-assume }}
+        aws-region: us-west-2
+    - name: Get deployment path
+      id: deployment-path
+      shell: bash
+      run: |
+        echo "deployment-path=${{ github.event.repository.name }}/${{ github.event.pull_request.head.sha }}/${{ inputs.target-path }}/" >> $GITHUB_OUTPUT
+    - name: Deploy content
+      id: deploy
+      shell: bash
+      run: |
+        aws s3 cp ${{ inputs.source-path }} s3://${{ inputs.deployment-bucket }}/${{ steps.deployment-path.outputs.deployment-path }} --recursive
