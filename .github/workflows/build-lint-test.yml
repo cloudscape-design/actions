@@ -27,6 +27,25 @@ permissions:
   security-events: write
 
 jobs:
+  git-secrets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code with history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 500
+
+      - name: Install git-secrets
+        run: |
+          wget -O /usr/local/bin/git-secrets https://raw.githubusercontent.com/awslabs/git-secrets/master/git-secrets
+          chmod +x /usr/local/bin/git-secrets
+          git secrets --register-aws --global
+
+      - name: Run git-secrets
+        run: git secrets --scan-history
+
   build:
     runs-on: ubuntu-latest
     steps:
