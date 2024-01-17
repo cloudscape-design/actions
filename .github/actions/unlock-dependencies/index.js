@@ -11,19 +11,23 @@ const path = require('path');
 const filename = path.resolve(process.env.GITHUB_WORKSPACE, 'package-lock.json');
 const packageLock = JSON.parse(fs.readFileSync(filename));
 
-function removeDependencies(dependencyName, packages) {
-  if (dependencyName.includes('@cloudscape-design/')) {
-    delete packages[dependencyName];
-  }
+function removeDependencies(dependencies) {
+  Object.keys(dependencies).forEach(dependencyName => {
+    if (dependencyName.includes('@cloudscape-design/')) {
+      delete dependencies[dependencyName];
+    }
+  });
 }
 
-Object.keys(packageLock.packages).forEach(dependencyName => {
-  removeDependencies(dependencyName, packageLock.packages);
-});
-
-Object.keys(packageLock.dependencies).forEach(dependencyName => {
-  removeDependencies(dependencyName, packageLock.dependencies);
-});
+if (packageLock.lockfileVersion === 2 || packageLock.lockfileVersion === 3) {
+  // Apply deletion function to both packages and dependencies (if v2)
+  removeDependencies(packageLock.packages);
+  if (packageLock.lockfileVersion === 2) {
+    removeDependencies(packageLock.dependencies);
+  }
+} else {
+  throw new Error(`Unsupported lockfileVersion: ${packageLock.lockfileVersion}`);
+}
 
 fs.writeFileSync(filename, JSON.stringify(packageLock, null, 2) + '\n');
 console.log('Removed @cloudscape-design/ dependencies from package-lock file');
