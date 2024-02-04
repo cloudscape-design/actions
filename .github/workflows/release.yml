@@ -9,6 +9,11 @@ on:
         description: Comma-separated list of sub-folders to publish
         type: string
         required: false
+      publish-artifacts:
+        description: Root folder to publish build artifacts
+        type: string
+        required: false
+        default: './'
       skip-test:
         type: boolean
         description: Skip tests
@@ -37,6 +42,27 @@ jobs:
       - run: npm run test
         if: ${{ inputs.skip-test == false }}
 
+      - name: Publish release artifacts
+        id: upload-release
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: |
+            ${{ inputs.publish-artifacts }}
+            !.git
+            !.github
+            !node_modules
+            !coverage
+        # TODO call the build
+      - name: Run CodeBuild
+        run: |
+          echo https://api.github.com/repos/$AWSUI_REPO/actions/artifacts/$AWSUI_ARTIFACT_ID/zip
+        env:
+          AWSUI_REPO: ${{ github.repository }}
+          AWSUI_COMMIT: ${{ github.sha }}
+          AWSUI_ARTIFACT_ID: ${{ steps.upload-release.outputs.artifact-id }}
+          AWSUI_OVERRIDE_TARGET_BRANCH: ${{ github.ref_name }}
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -48,7 +74,6 @@ jobs:
         run: |
           echo Logging into repository $CODE_ARTIFACT_REPO
           aws codeartifact login --tool npm --repository $CODE_ARTIFACT_REPO --domain awsui --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region us-west-2 --namespace @cloudscape-design
-
       - name: Release package to private CodeArtifact
         uses: cloudscape-design/actions/.github/actions/release-package@main
         with:
