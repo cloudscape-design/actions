@@ -8,7 +8,10 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
-    - name: Setup GraphQL API
-      uses: octokit/graphql@v7
+    - name: Install GraphQL API
+      run: |
+        echo "Start installation"
+        npm i @octokit/graphql
+        echo "Graphql installed"
     - run: TOKEN=${{inputs.token}} REPO=${{inputs.repo}} node ${{ github.action_path }}/index.mjs
       shell: bash
