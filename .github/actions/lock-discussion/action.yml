@@ -9,6 +9,7 @@ runs:
       with:
         node-version: 18
     - name: Install GraphQL API
+      shell: bash
       run: |
         echo "Start installation"
         npm i @octokit/graphql
