@@ -25,6 +25,9 @@ function releasePackage(packagePath) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath));
   packageJson.version += inputs.suffix;
 
+  // Remove lifecycle scripts as they were already run before
+  packageJson.scripts = {};
+
   // Add internal folder to files in package.json
   if (packageJson.files) {
     packageJson.files.push(internalFolderName);
