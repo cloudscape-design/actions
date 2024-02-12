@@ -26,6 +26,11 @@ permissions:
   contents: read
   security-events: write
 
+env:
+  # Disable Husky in CI
+  # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
+  HUSKY: 0
+
 jobs:
   git-secrets:
     runs-on: ubuntu-latest
