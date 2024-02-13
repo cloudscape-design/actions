@@ -30,7 +30,7 @@ jobs:
         run: npx conventional-changelog-cli@2 -i CHANGELOG.md -s -p conventionalcommits
       - name: Get number of lines in CHANGELOG.md
         id: changelog
-        run: echo ::set-output name=changelog_lines::$(wc -l < "CHANGELOG.md")
+        run: echo "changelog_lines=$(wc -l < "CHANGELOG.md" | sed  s/\ //g)" >> $GITHUB_OUTPUT
         shell: bash
       - name: Add empty release note
         run: echo "No customer visible changes in this release" >> CHANGELOG.md
