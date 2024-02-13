@@ -16,7 +16,7 @@ runs:
 
     - name: Define new version suffix
       id: vars
-      run: echo "::set-output name=version_suffix::-next-build.$(git rev-parse --short HEAD)"
+      run: echo "version_suffix=next-build.$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       shell: bash
 
     - run: node ${{ github.action_path }}/index.mjs
