@@ -69,14 +69,6 @@ function updateDependencyVersions(dependencies, newVersion, sourcePackageName) {
         return;
       }
 
-      // Don't touch this local lerna dependency in test-utils-converter
-      if (
-        sourcePackageName === '@cloudscape-design/test-utils-converter' &&
-        packageName === '@cloudscape-design/test-utils-core'
-      ) {
-        return;
-      }
-
       const nextVersion = typeof newVersion === 'function' ? newVersion(packageName) : newVersion;
 
       if (isPackageLock) {
