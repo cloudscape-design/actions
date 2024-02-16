@@ -80,7 +80,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
-        cd packages/core
+        cd lib/core
         npm pack
         cp *-test-utils-core-*.tgz $GITHUB_WORKSPACE
         cd ../converter
