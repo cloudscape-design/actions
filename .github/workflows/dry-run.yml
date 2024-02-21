@@ -15,7 +15,6 @@ defaults:
   run:
     shell: bash
 
-
 env:
   # Disable Husky in CI
   # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
@@ -166,6 +165,25 @@ jobs:
         run: tar -xzf components-full.tgz
       - name: Integration tests
         run: npm run test:integ
+
+  motionTest:
+    name: Components motion tests
+    runs-on: ubuntu-latest
+    needs:
+      - buildComponents
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Download component artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: components-package
+      - name: Unpack components artifacts
+        run: tar -xzf components-full.tgz
+      - name: Motion tests
+        run: npm run test:motion
 
   a11yTest:
     name: Components accessibility tests
