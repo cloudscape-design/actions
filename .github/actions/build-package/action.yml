@@ -59,8 +59,16 @@ runs:
       shell: bash
       run: npm test
       working-directory: ${{ inputs.package }}
-    - name: Pack artifacts
-      if: ${{ inputs.package != 'components' && inputs.package != 'test-utils' && inputs.package != 'theming-core' && inputs.package != 'board-components' && inputs.package != 'demos' }}
+    - name: Pack artifacts (lib folder)
+      if: ${{ inputs.package == 'component-toolkit' }}
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      run: |
+        cd lib
+        npm pack
+        cp *-${{ inputs.package }}-*.tgz $GITHUB_WORKSPACE/${{ inputs.package }}.tgz
+    - name: Pack artifacts (root folder)
+      if: ${{ inputs.package == 'browser-test-tools' || inputs.package == 'collection-hooks' || inputs.package == 'documenter' || inputs.package == 'global-styles' || inputs.package == 'jest-preset' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
