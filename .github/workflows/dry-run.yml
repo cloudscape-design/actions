@@ -15,7 +15,6 @@ defaults:
   run:
     shell: bash
 
-
 env:
   # Disable Husky in CI
   # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
