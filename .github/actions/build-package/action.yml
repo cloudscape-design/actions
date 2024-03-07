@@ -60,7 +60,7 @@ runs:
       run: npm test
       working-directory: ${{ inputs.package }}
     - name: Pack artifacts (lib folder)
-      if: ${{ inputs.package == 'component-toolkit' || inputs.package == 'browser-test-tools' }}
+      if: ${{ inputs.package == 'component-toolkit' || inputs.package == 'browser-test-tools' || inputs.package == 'documenter' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
@@ -68,7 +68,7 @@ runs:
         npm pack
         cp *-${{ inputs.package }}-*.tgz $GITHUB_WORKSPACE/${{ inputs.package }}.tgz
     - name: Pack artifacts (root folder)
-      if: ${{ inputs.package == 'collection-hooks' || inputs.package == 'documenter' || inputs.package == 'global-styles' || inputs.package == 'jest-preset' }}
+      if: ${{ inputs.package == 'collection-hooks' || inputs.package == 'global-styles' || inputs.package == 'jest-preset' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
