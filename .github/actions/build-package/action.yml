@@ -107,8 +107,8 @@ runs:
         mv *-theming-build-*.tgz theming-build.tgz
         mv *-theming-runtime-*.tgz theming-runtime.tgz
 
-    - name: Package board components files
-      if: ${{ inputs.package == 'board-components' }}
+    - name: Package generic components packages
+      if: ${{ inputs.package == 'board-components' || inputs.package == 'code-view' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
