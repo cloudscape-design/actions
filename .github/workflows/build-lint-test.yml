@@ -61,7 +61,7 @@ jobs:
           node-version: 18
       - name: Unlock dependencies
         uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
-      - run: npm i --force
+      - run: npm install
       - run: npm run build
       - run: npm run lint
       - run: npm run test
