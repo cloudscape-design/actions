@@ -28,7 +28,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
           package: jest-preset
-          skip_build: true
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
