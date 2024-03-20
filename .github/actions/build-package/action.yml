@@ -47,7 +47,7 @@ runs:
 
     - name: npm install
       shell: bash
-      run: npm i --force
+      run: npm install
       working-directory: ${{ inputs.package }}
     - name: Build
       if: ${{ inputs.skip_build != 'true' }}
