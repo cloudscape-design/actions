@@ -1,5 +1,3 @@
-# This workflow releases the current package to a dedicated private CodeArtifact repository.
-# One repository may publish more than one package. For more details refer to the release-package Action.
 name: release
 
 on:
@@ -36,25 +34,35 @@ jobs:
           node-version: 18
 
       - run: npm install
-
       - run: npm run build
-
       - run: npm run test
         if: ${{ inputs.skip-test == false }}
+      - name: Upload release artifacts
+        id: upload-release
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: lib
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_CODEARTIFACT_ROLE }}
           aws-region: us-west-2
-      - name: Login and configure codeartifact
-        env:
-          CODE_ARTIFACT_REPO: ${{ startsWith(github.ref_name, 'dev-v3-') && format('AwsUI-Artifacts-{0}', github.ref_name) || 'github-artifacts' }}
-        run: |
-          echo Logging into repository $CODE_ARTIFACT_REPO
-          aws codeartifact login --tool npm --repository $CODE_ARTIFACT_REPO --domain awsui --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region us-west-2 --namespace @cloudscape-design
-
-      - name: Release package to private CodeArtifact
-        uses: cloudscape-design/actions/.github/actions/release-package@main
+      - name: Run CodeBuild
+        uses: aws-actions/aws-codebuild-run-build@v1
         with:
-          publish-packages: ${{ inputs.publish-packages }}
+          project-name: Importer
+          disable-source-override: true
+          hide-cloudwatch-logs: true
+          env-vars-for-codebuild: |
+            GITHUB_ARTIFACT_ID,
+            GITHUB_REPOSITORY_NAME,
+            GITHUB_COMMIT_MESSAGE,
+            GITHUB_TOKEN
+        env:
+          GITHUB_ARTIFACT_ID: ${{ steps.upload-release.outputs.artifact-id }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          GITHUB_COMMIT_MESSAGE: ${{ github.event.commits[0].message }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
