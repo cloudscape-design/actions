@@ -52,7 +52,7 @@ jobs:
       - name: Run CodeBuild
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
-          project-name: Importer
+          project-name: Importer-v2
           disable-source-override: true
           hide-cloudwatch-logs: true
           env-vars-for-codebuild: |
