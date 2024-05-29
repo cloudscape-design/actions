@@ -47,7 +47,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_CODEARTIFACT_ROLE }}
+          role-to-assume: ${{ secrets.AWSUI_AWS_ROLE }}
           aws-region: us-west-2
       - name: Run CodeBuild
         uses: aws-actions/aws-codebuild-run-build@v1
@@ -56,13 +56,16 @@ jobs:
           disable-source-override: true
           hide-cloudwatch-logs: true
           env-vars-for-codebuild: |
-            GITHUB_ARTIFACT_ID,
-            GITHUB_REPOSITORY_NAME,
-            GITHUB_COMMIT_MESSAGE,
-            GITHUB_TOKEN
+            AWSUI_GITHUB_ARTIFACT_ID,
+            AWSUI_GITHUB_BRANCH_NAME,
+            AWSUI_GITHUB_COMMIT_MESSAGE,
+            AWSUI_GITHUB_COMMIT_SHA,
+            AWSUI_GITHUB_REPOSITORY_NAME,
+            AWSUI_GITHUB_TOKEN
         env:
-          GITHUB_ARTIFACT_ID: ${{ steps.upload-release.outputs.artifact-id }}
-          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
-          GITHUB_COMMIT_MESSAGE: ${{ github.event.commits[0].message }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          AWSUI_GITHUB_ARTIFACT_ID: ${{ steps.upload-release.outputs.artifact-id }}
+          AWSUI_GITHUB_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          AWSUI_GITHUB_COMMIT_SHA: ${{ github.event.commits[0].sha }}
+          AWSUI_GITHUB_COMMIT_MESSAGE: ${{ github.event.commits[0].message }}
+          AWSUI_GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          AWSUI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
