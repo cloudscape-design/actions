@@ -101,7 +101,7 @@ runs:
         mv *-theming-runtime-*.tgz theming-runtime.tgz
 
     - name: Package generic components packages
-      if: ${{ inputs.package == 'board-components' || inputs.package == 'code-view' }}
+      if: ${{ inputs.package == 'board-components' || inputs.package == 'code-view' || inputs.package == 'chat-components' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
