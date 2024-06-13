@@ -147,6 +147,26 @@ jobs:
           package: code-view
           download_dependencies: true
 
+  buildChatComponents:
+    name: Build chat components
+    runs-on: ubuntu-latest
+    needs:
+      - buildGlobalStyles
+      - buildBrowserTestTools
+      - buildDocumenter
+      - buildTestUtils
+      - buildComponentToolkit
+      - buildComponents
+    steps:
+      - name: Download component artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: components-package
+      - uses: cloudscape-design/actions/.github/actions/build-package@main
+        with:
+          package: chat-components
+          download_dependencies: true
+
   unitTest:
     name: Components unit tests
     runs-on: ubuntu-latest
@@ -241,6 +261,7 @@ jobs:
       - buildComponents
       - buildBoardComponents
       - buildCodeView
+      - buildChatComponents
       - buildBrowserTestTools
       - buildCollectionHooks
       - buildTestUtils
