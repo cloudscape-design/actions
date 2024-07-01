@@ -18,7 +18,7 @@ runs:
         tar -zcvf ${{ inputs.name }}.tar.gz ${{ inputs.path }}
       shell: bash
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
         path: ${{ inputs.name }}.tar.gz
