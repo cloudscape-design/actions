@@ -25,35 +25,35 @@ jobs:
     name: Build jest-preset
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: jest-preset
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: global-styles
   buildCollectionHooks:
     name: Build collection-hooks
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: collection-hooks
   buildBrowserTestTools:
     name: Build browser-test-tools
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: browser-test-tools
   buildDocumenter:
     name: Build documenter
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: documenter
   buildTestUtils:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: buildDocumenter
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: test-utils
           download_dependencies: true
@@ -72,7 +72,7 @@ jobs:
       - buildBrowserTestTools
       - buildComponentToolkit
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: theming-core
           artifact_path: theming-*.tgz
@@ -83,7 +83,7 @@ jobs:
     needs:
       - buildBrowserTestTools
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: component-toolkit
           download_dependencies: true
@@ -100,7 +100,7 @@ jobs:
       - buildThemingCore
       - buildComponentToolkit
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: components
           target_artifact: components-package
@@ -123,7 +123,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: components-package
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: board-components
           download_dependencies: true
@@ -143,7 +143,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: components-package
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: code-view
           download_dependencies: true
@@ -163,7 +163,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: components-package
-      - uses: cloudscape-design/actions/.github/actions/build-package@main
+      - uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: chat-components
           download_dependencies: true
@@ -274,7 +274,7 @@ jobs:
         with:
           name: components-package
       - name: Build
-        uses: cloudscape-design/actions/.github/actions/build-package@main
+        uses: cloudscape-design/actions/.github/actions/build-package@gasda/artifacts-v4
         with:
           package: demos
           download_dependencies: true
