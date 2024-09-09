@@ -14,11 +14,17 @@ inputs:
   target-path:
     description: Path prefix on the deployment URL
     required: true
+  commit-sha:
+    description: Commit SHA that is part of the URL
+    default: ${{ github.event.pull_request.head.sha }}
+  cloudfront-host:
+    description: Host name of the Cloudfront distribution
+    default: d21d5uik3ws71m.cloudfront.net
 
 outputs:
   preview-url:
     description: URL of the deployed artifacts
-    value: https://d21d5uik3ws71m.cloudfront.net/${{ steps.deployment-path.outputs.deployment-path }}
+    value: https://${{ inputs.cloudfront-host }}/${{ steps.deployment-path.outputs.deployment-path }}
 
 runs:
   using: composite
@@ -32,7 +38,7 @@ runs:
       id: deployment-path
       shell: bash
       run: |
-        echo "deployment-path=${{ github.event.repository.name }}/${{ github.event.pull_request.head.sha }}/${{ inputs.target-path }}/" >> $GITHUB_OUTPUT
+        echo "deployment-path=${{ github.event.repository.name }}/${{ inputs.commit-sha }}/${{ inputs.target-path }}/" >> $GITHUB_OUTPUT
     - name: Deploy content
       id: deploy
       shell: bash
