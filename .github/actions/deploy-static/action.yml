@@ -17,14 +17,11 @@ inputs:
   commit-sha:
     description: Commit SHA that is part of the URL
     default: ${{ github.event.pull_request.head.sha }}
-  cloudfront-host:
-    description: Host name of the Cloudfront distribution
-    default: d21d5uik3ws71m.cloudfront.net
 
 outputs:
   preview-url:
     description: URL of the deployed artifacts
-    value: https://${{ inputs.cloudfront-host }}/${{ steps.deployment-path.outputs.deployment-path }}
+    value: https://d21d5uik3ws71m.cloudfront.net/${{ steps.deployment-path.outputs.deployment-path }}
 
 runs:
   using: composite
