@@ -1,0 +1,8 @@
+{
+  "name": "@cloudscape-design/create-build-tree",
+  "dependencies": {
+    "@octokit/rest": "^21.0.2",
+    "graphlib": "^2.1.8",
+    "octokit": "^4.0.2"
+  }
+}
