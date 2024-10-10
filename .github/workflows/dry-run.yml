@@ -31,47 +31,15 @@ jobs:
         id: set-matrix-output
         with:
           package: ${{ github.event.repository.full_name }}
-  build:
+  build_level_0:
     needs: createBuildTree
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.createBuildTree.outputs.matrix) }}
+      matrix:
+        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['0'] }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download dependencies artifacts
-        if: ${{ matrix.level > 0 }}
-        uses: actions/download-artifact@v4
+      - name: Build Level 0
+        uses: ./github/actions/build-package
         with:
-          name: ${{ join(needs.createBuildTree.outputs.matrix.*.package, ',') }}
-          path: ./.cache
+          package: ${{ matrix.package }}
 
-      - name: Install dependencies from local tarballs
-        if: ${{ matrix.level > 0 }}
-        run: |
-          for package in $(ls ./.cache/*.tgz); do
-            npm install "$package"
-          done
-
-      - name: Install remaining dependencies from npm
-        run: npm install
-
-      - name: Build package
-        run: npm run build
-
-      # Package each component in ./lib into a .tgz tarball - TODO: Account for multiple packages in lib
-      - name: Package built components
-        run: |
-          cd ./lib
-          for dir in */; do
-            cd "$dir"
-            npm pack
-            cd ..
-          done
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.package }}
-          path: ./lib/*.tgz
