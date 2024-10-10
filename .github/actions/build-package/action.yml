@@ -50,8 +50,14 @@ runs:
           cd ..
         done
 
+    - name: Sanitize package name
+      id: sanitize
+      run: |
+        SANITIZED_NAME=$(echo "${{ inputs.package }}" | sed 's/@//g' | sed 's/\//-/g')
+        echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.package }}
+        name: ${{ steps.sanitize.outputs.sanitized_name }}
         path: ./lib/*.tgz
