@@ -9,7 +9,7 @@ if (!repoName) {
 
 async function generateBuildMatrix(repoName) {
   console.log('Creating dependency groups for repo', repoName);
-  const packageName = `@${packageName}`;
+  const packageName = `@${repoName}`;
   const groups = await buildDependencyGroupsForPackage(packageName);
   let matrix = [];
 
