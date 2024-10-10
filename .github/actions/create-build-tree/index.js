@@ -15,7 +15,7 @@ async function generateBuildMatrix(repoName) {
 
   for (const level in groups) {
     for (const packageName of groups[level]) {
-      matrix.push({ package: packageName });
+      matrix.push({ level: parseInt(level), package: packageName });
     }
   }
 
