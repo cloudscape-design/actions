@@ -1,43 +1,48 @@
-const { promises: fs } = require("node:fs");
+const { promises: fs } = require('node:fs');
+const path = require('node:path');
 
 // Mapping of artifacts to their producing repositories
 const artifactToRepositoryMap = {
-  "@cloudscape-design/theming-runtime": "@cloudscape-design/theming-core",
-  "@cloudscape-design/theming-build": "@cloudscape-design/theming-core",
+  '@cloudscape-design/theming-runtime': '@cloudscape-design/theming-core',
+  '@cloudscape-design/theming-build': '@cloudscape-design/theming-core',
   // Add other mappings as needed
 };
 
 async function loadDependenciesMap() {
   try {
-    const data = await fs.readFile("dependencies.json", { encoding: "utf-8" });
+    const data = await fs.readFile(path.join(__dirname, 'dependencies.json'), { encoding: 'utf-8' });
     const dependenciesMap = JSON.parse(data);
 
     // Adjust dependencies map to reflect repository names
     const adjustedDependenciesMap = {};
     for (const [repo, dependencies] of Object.entries(dependenciesMap)) {
-      adjustedDependenciesMap[artifactToRepositoryMap[repo] || repo] = dependencies.map(dep => artifactToRepositoryMap[dep] || dep);
+      adjustedDependenciesMap[artifactToRepositoryMap[repo] || repo] = dependencies.map(
+        dep => artifactToRepositoryMap[dep] || dep
+      );
     }
     return adjustedDependenciesMap;
   } catch (error) {
-    console.error("Failed to load dependencies map:", error);
+    console.error('Failed to load dependencies map:', error);
     return {};
   }
 }
 
 async function loadDependentMap() {
   try {
-    const data = await fs.readFile("dependentMap.json", { encoding: "utf-8" });
+    const data = await fs.readFile(path.join(__dirname, 'dependentMap.json'), { encoding: 'utf-8' });
     const dependentMap = JSON.parse(data);
 
     // Adjust dependent map to reflect repository names
     const adjustedDependentMap = {};
     for (const [artifact, dependents] of Object.entries(dependentMap)) {
       const repo = artifactToRepositoryMap[artifact] || artifact;
-      adjustedDependentMap[repo] = (adjustedDependentMap[repo] || []).concat(dependents.map(dep => artifactToRepositoryMap[dep] || dep));
+      adjustedDependentMap[repo] = (adjustedDependentMap[repo] || []).concat(
+        dependents.map(dep => artifactToRepositoryMap[dep] || dep)
+      );
     }
     return adjustedDependentMap;
   } catch (error) {
-    console.error("Failed to load dependent map:", error);
+    console.error('Failed to load dependent map:', error);
     return {};
   }
 }
@@ -91,7 +96,7 @@ async function buildDependencyGroupsForPackage(packageName) {
   for (const [packageName, level] of Object.entries(levels)) {
     if (!groups[level]) {
       groups[level] = [];
-    };
+    }
 
     groups[level].push(packageName);
   }
