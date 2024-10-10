@@ -18,12 +18,13 @@ async function generateBuildMatrix(packageName) {
 }
 
 generateBuildMatrix(packageName).then(matrix => {
-  const output = JSON.stringify(matrix);
   const outputFilePath = process.env.GITHUB_OUTPUT;
 
-  if (outputFilePath) {
-    fs.appendFileSync(outputFilePath, `matrix=${output}\n`);
-  } else {
-    console.error('GITHUB_OUTPUT is not defined.');
+  if (!outputFilePath) {
+    throw new Error(`Missing file at path: ${outputFilePath}`)
   }
+
+  const output = JSON.stringify(matrix);
+  console.log('Build matrix json', output);
+  fs.appendFileSync(outputFilePath, `matrix=${output}\n`, { encoding: 'utf8' });
 });

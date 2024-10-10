@@ -24,9 +24,6 @@ jobs:
   createBuildTree:
     name: Create build tree
     runs-on: ubuntu-latest
-    env:
-      INPUT_PACKAGE: ${{ github.event.repository.full_name }}
-      GITHUB_OUTPUT: $GITHUB_OUTPUT    
     steps:
       - uses: cloudscape-design/actions/.github/actions/create-build-tree@dry-run
         with:
