@@ -42,4 +42,16 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-package@dry-run
         with:
           package: ${{ matrix.package }}
+  build_level_1:
+    needs: build_level_0
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] }}
+    steps:
+      - name: Build Level 1
+        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
+        with:
+          package: ${{ matrix.package }}
+          dependencies:  ${{ fromJson(needs.createBuildTree.outputs.matrix)['0'] }}    
 
