@@ -81,7 +81,7 @@ function determineLevels(dependenciesMap, packagesToConsider) {
   return levels;
 }
 
-export async function buildDependencyGroupsForPackage(packageName) {
+async function buildDependencyGroupsForPackage(packageName) {
   const adjustedPackageName = artifactToRepositoryMap[packageName] || packageName;
   const [dependenciesMap, dependentMap] = await Promise.all([loadDependenciesMap(), loadDependentMap()]);
   const packagesToRebuild = collectAllDependents(adjustedPackageName, dependentMap, new Set([adjustedPackageName]));
@@ -98,3 +98,5 @@ export async function buildDependencyGroupsForPackage(packageName) {
 
   return groups;
 }
+
+module.exports = { buildDependencyGroupsForPackage };
