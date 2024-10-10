@@ -11,15 +11,7 @@ async function generateBuildMatrix(repoName) {
   console.log('Creating dependency groups for repo', repoName);
   const packageName = `@${repoName}`;
   const groups = await buildDependencyGroupsForPackage(packageName);
-  let matrix = [];
-
-  for (const level in groups) {
-    for (const packageName of groups[level]) {
-      matrix.push({ level: parseInt(level), package: packageName });
-    }
-  }
-
-  return matrix;
+  return groups;
 }
 
 generateBuildMatrix(repoName).then(matrix => {
