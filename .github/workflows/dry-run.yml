@@ -24,12 +24,13 @@ jobs:
   createBuildTree:
     name: Create build tree
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix-output.outputs.matrix }}    
     steps:
       - uses: cloudscape-design/actions/.github/actions/create-build-tree@dry-run
+        id: set-matrix-output
         with:
           package: ${{ github.event.repository.full_name }}
-    env:
-      GITHUB_OUTPUT: $GITHUB_OUTPUT
   build:
     needs: createBuildTree
     runs-on: ubuntu-latest
