@@ -60,7 +60,7 @@ runs:
       run: npm test
       working-directory: ${{ inputs.package }}
     - name: Pack artifacts (lib folder)
-      if: ${{ inputs.package == 'build-tools' | inputs.package == 'component-toolkit' || inputs.package == 'browser-test-tools' || inputs.package == 'documenter' || inputs.package == 'jest-preset' || inputs.package == 'global-styles' ||  inputs.package == 'collection-hooks' }}
+      if: ${{ inputs.package == 'build-tools' || inputs.package == 'component-toolkit' || inputs.package == 'browser-test-tools' || inputs.package == 'documenter' || inputs.package == 'jest-preset' || inputs.package == 'global-styles' ||  inputs.package == 'collection-hooks' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
