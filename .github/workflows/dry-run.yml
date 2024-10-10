@@ -39,7 +39,7 @@ jobs:
         package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['0'] }}
     steps:
       - name: Build Level 0
-        uses: ./github/actions/build-package
+        uses: cloudscape-design/github/actions/build-package@dry-run
         with:
           package: ${{ matrix.package }}
 
