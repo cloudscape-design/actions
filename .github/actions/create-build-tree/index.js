@@ -1,7 +1,9 @@
+const { buildDependencyGroupsForPackage } = require('./build-tree');
+
 const packageName = process.env.INPUT_PACKAGE;
 
-async function generateBuildMatrix() {
-  const groups = await buildDependencyGroupsForPackage('modified-package-name');
+async function generateBuildMatrix(packageName) {
+  const groups = await buildDependencyGroupsForPackage(packageName);
   let matrix = [];
 
   for (const level in groups) {
@@ -10,7 +12,7 @@ async function generateBuildMatrix() {
     }
   }
 
-  console.log(`::set-output name=matrix::${JSON.stringify(matrix)}`);
+  return matrix;
 }
 
-generateBuildMatrix();
+generateBuildMatrix(packageName).then(matrix => console.log(`::set-output name=matrix::${JSON.stringify(matrix)}`));
