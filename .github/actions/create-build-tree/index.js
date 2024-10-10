@@ -1,9 +1,10 @@
+const fs = require('node:fs');
 const { buildDependencyGroupsForPackage } = require('./build-tree');
 
 const packageName = process.env.INPUT_PACKAGE;
 
 async function generateBuildMatrix(packageName) {
-  console.log("Creating dependency groups for package", packageName);
+  console.log('Creating dependency groups for package', packageName);
   const groups = await buildDependencyGroupsForPackage(packageName);
   let matrix = [];
 
