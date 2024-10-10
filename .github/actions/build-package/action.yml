@@ -19,24 +19,28 @@ runs:
       if: ${{ dependencies != '' }}
       uses: actions/download-artifact@v4
       with:
-        name: ${{ dependencies }}
+        name: ${{ inputs.dependencies }}
         path: ./.cache
 
     - name: Install dependencies from local tarballs
-      if: ${{ dependencies != '' }}
+      if: ${{ inputs.dependencies != '' }}
+      shell: bash
       run: |
         for package in $(ls ./.cache/*.tgz); do
           npm install "$package"
         done
 
     - name: Install dependencies from npm
+      shell: bash
       run: npm install
 
     - name: Build package
+      shell: bash
       run: npm run build
 
     # Package each component in ./lib into a .tgz tarball - TODO: Fix for multiple packages in lib
     - name: Package lib
+      shell: bash    
       run: |
         cd ./lib
         for dir in */; do
