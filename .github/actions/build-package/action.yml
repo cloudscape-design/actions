@@ -41,7 +41,7 @@ runs:
     - run: cd ${{ inputs.package }}
       shell: bash
 
-    - uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@main
+    - uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@test/build-tools
       with:
         path: ${{ github.workspace }}/${{ inputs.package }}
 
