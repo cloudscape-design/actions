@@ -1,9 +1,7 @@
-const fs = require('fs');
-
 const packageName = process.env.INPUT_PACKAGE;
 
 async function generateBuildMatrix() {
-  const groups = await buildDependencyGroupsForPackage('modified-package-name'); // This should be dynamically determined based on the PR or commit
+  const groups = await buildDependencyGroupsForPackage('modified-package-name');
   let matrix = [];
 
   for (const level in groups) {
