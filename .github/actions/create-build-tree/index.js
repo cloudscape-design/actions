@@ -1,10 +1,15 @@
 const fs = require('node:fs');
 const { buildDependencyGroupsForPackage } = require('./build-tree');
 
-const packageName = process.env.INPUT_PACKAGE;
+const repoName = process.env.INPUT_PACKAGE;
 
-async function generateBuildMatrix(packageName) {
-  console.log('Creating dependency groups for package', packageName);
+if (!repoName) {
+  throw new Error('Missing input: package');
+}
+
+async function generateBuildMatrix(repoName) {
+  console.log('Creating dependency groups for repo', repoName);
+  const packageName = `@${packageName}`;
   const groups = await buildDependencyGroupsForPackage(packageName);
   let matrix = [];
 
@@ -17,7 +22,7 @@ async function generateBuildMatrix(packageName) {
   return matrix;
 }
 
-generateBuildMatrix(packageName).then(matrix => {
+generateBuildMatrix(repoName).then(matrix => {
   const outputFilePath = process.env.GITHUB_OUTPUT;
 
   if (!outputFilePath) {
