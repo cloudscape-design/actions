@@ -3,6 +3,7 @@ const { buildDependencyGroupsForPackage } = require('./build-tree');
 const packageName = process.env.INPUT_PACKAGE;
 
 async function generateBuildMatrix(packageName) {
+  console.log("Creating dependency groups for package", packageName);
   const groups = await buildDependencyGroupsForPackage(packageName);
   let matrix = [];
 
@@ -15,4 +16,13 @@ async function generateBuildMatrix(packageName) {
   return matrix;
 }
 
-generateBuildMatrix(packageName).then(matrix => console.log(`::set-output name=matrix::${JSON.stringify(matrix)}`));
+generateBuildMatrix(packageName).then(matrix => {
+  const output = JSON.stringify(matrix);
+  const outputFilePath = process.env.GITHUB_OUTPUT;
+
+  if (outputFilePath) {
+    fs.appendFileSync(outputFilePath, `matrix=${output}\n`);
+  } else {
+    console.error('GITHUB_OUTPUT is not defined.');
+  }
+});
