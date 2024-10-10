@@ -55,9 +55,6 @@ jobs:
         run: npm install
 
       - name: Build package
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
         run: npm run build
 
       # Package each component in ./lib into a .tgz tarball - TODO: Account for multiple packages in lib
