@@ -51,6 +51,7 @@ runs:
         done
 
     - name: Sanitize package name
+      shell: bash
       id: sanitize
       run: |
         SANITIZED_NAME=$(echo "${{ inputs.package }}" | sed 's/@//g' | sed 's/\//-/g')
