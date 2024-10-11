@@ -33,9 +33,9 @@ jobs:
           package: ${{ github.event.repository.full_name }}
       - name: Debug matrix output
         run: |
-          echo "Level 0: ${{ fromJson(steps.set-matrix-output.outputs.matrix)['0'] }}"
-          echo "Level 1: ${{ fromJson(steps.set-matrix-output.outputs.matrix)['1'] }}"
-          echo "Level 2: ${{ fromJson(steps.set-matrix-output.outputs.matrix)['2'] }}"
+          echo "Level 0: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['0'], ',') }}"
+          echo "Level 1: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['1'], ',') }}"
+          echo "Level 2: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['2'], ',') }}"
 
   build_level_0:
     needs: createBuildTree
