@@ -18,6 +18,7 @@ runs:
     - name: Sanitize dependencies
       if: ${{ inputs.dependencies != '' }}
       id: sanitize-dependencies
+      shell: bash
       run: |
         SANITIZED_DEPENDENCIES=$(echo "${{ inputs.dependencies }}" | sed 's/@//g' | sed 's/\//-/g')
         echo "sanitized_dependencies=$SANITIZED_DEPENDENCIES" >> $GITHUB_OUTPUT
