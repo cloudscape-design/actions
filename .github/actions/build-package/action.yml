@@ -14,6 +14,8 @@ runs:
   steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.package }}
 
     - name: Download dependencies artifacts
       if: ${{ inputs.dependencies != '' }}
