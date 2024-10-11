@@ -49,7 +49,9 @@ jobs:
         with:
           package: ${{ matrix.package }}
   build_level_1:
-    needs: build_level_0
+    needs: 
+      - createBuildTree
+      - build_level_0
     runs-on: ubuntu-latest
     if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] != '' }}
     strategy:
@@ -62,7 +64,9 @@ jobs:
           package: ${{ matrix.package }}
           dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['0'], ',') }}
   build_level_2:
-    needs: build_level_1
+    needs: 
+      - createBuildTree
+      - build_level_1
     runs-on: ubuntu-latest
     if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] != '' }}
     strategy:
