@@ -31,6 +31,10 @@ jobs:
         id: set-matrix-output
         with:
           package: ${{ github.event.repository.full_name }}
+      - name: Debug matrix output
+        run: |
+          echo "Matrix Output: ${{ toJson(steps.set-matrix-output.outputs.matrix) }}"
+
   build_level_0:
     needs: createBuildTree
     runs-on: ubuntu-latest
