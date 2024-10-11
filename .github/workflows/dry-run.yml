@@ -25,17 +25,12 @@ jobs:
     name: Create build tree
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-output.outputs.matrix }}    
+      matrix: ${{ steps.set-matrix-output.outputs.matrix }}
     steps:
       - uses: cloudscape-design/actions/.github/actions/create-build-tree@dry-run
         id: set-matrix-output
         with:
-          package: cloudscape-design/test-utils
-      - name: Debug matrix output
-        run: |
-          echo "Level 0: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['0'], ',') }}"
-          echo "Level 1: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['1'], ',') }}"
-          echo "Level 2: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['2'], ',') }}"
+          package: ${{ github.event.repository.full_name }}
 
   build_level_0:
     needs: createBuildTree
@@ -49,7 +44,7 @@ jobs:
         with:
           package: ${{ matrix.package }}
   build_level_1:
-    needs: 
+    needs:
       - createBuildTree
       - build_level_0
     runs-on: ubuntu-latest
@@ -64,7 +59,7 @@ jobs:
           package: ${{ matrix.package }}
           dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['0'], ',') }}
   build_level_2:
-    needs: 
+    needs:
       - createBuildTree
       - build_level_1
     runs-on: ubuntu-latest
@@ -78,3 +73,33 @@ jobs:
         with:
           package: ${{ matrix.package }}
           dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['1'], ',') }}
+  build_level_3:
+    needs:
+      - createBuildTree
+      - build_level_2
+    runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] != '' }}
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] }}
+    steps:
+      - name: Build Level 3
+        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
+        with:
+          package: ${{ matrix.package }}
+          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['2'], ',') }}
+build_level_4:
+  needs:
+    - createBuildTree
+    - build_level_3
+  runs-on: ubuntu-latest
+  if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] != '' }}
+  strategy:
+    matrix:
+      package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] }}
+  steps:
+    - name: Build Level 4
+      uses: cloudscape-design/actions/.github/actions/build-package@dry-run
+      with:
+        package: ${{ matrix.package }}
+        dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}
