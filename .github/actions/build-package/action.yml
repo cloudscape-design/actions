@@ -34,7 +34,7 @@ runs:
       run: |
         for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
           echo "Installing $package"
-          npm install "$package"
+          npm install --no-save "$package"
         done
 
     - name: Install dependencies from npm
