@@ -8,6 +8,12 @@ inputs:
     description: List of dependencies
     required: true
     default: ''
+  skip_build:
+    description: Whether to skip the build
+    default: false
+  skip_tests:
+    description: Whether to skip the tests
+    default: false    
 
 runs:
   using: composite
@@ -43,9 +49,15 @@ runs:
       run: npm install
 
     - name: Build package
+      if: ${{ inputs.skip_build != 'true' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: npm run build
+    - name: Test
+      if: ${{ inputs.skip_tests != 'true' }}
+      shell: bash
+      run: npm test
+      working-directory: ${{ inputs.package }}      
 
     - name: Package lib
       shell: bash
