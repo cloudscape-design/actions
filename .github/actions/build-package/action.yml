@@ -43,15 +43,27 @@ runs:
 
     # Package each component in ./lib into a .tgz tarball - TODO: Handle single and multiple packages
     - name: Package lib
-      shell: bash    
+      shell: bash
       run: |
         cd ./lib
-        for dir in */; do
-          cd "$dir"
+        if [ -f "package.json" ]; then
+          # If there's a package.json in ./lib, just pack it here
+          echo "Found package.json in ./lib, running npm pack in ./lib"
           npm pack
-          mv *.tgz ../
-          cd ..
-        done
+        else
+          # Otherwise, iterate through subdirectories and pack if package.json exists
+          echo "No package.json found in ./lib, iterating through subdirectories"
+          for dir in */; do
+            if [ -f "$dir/package.json" ]; then
+              cd "$dir"
+              npm pack
+              mv *.tgz ../
+              cd ..
+            else
+              echo "No package.json in $dir, skipping npm pack"
+            fi
+          done
+        fi
 
     - name: Sanitize package name
       shell: bash
