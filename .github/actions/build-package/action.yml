@@ -57,7 +57,7 @@ runs:
             if [ -f "$dir/package.json" ]; then
               cd "$dir"
               npm pack
-              mv *.tgz ../
+              cp *.tgz ../
               cd ..
             else
               echo "No package.json in $dir, skipping npm pack"
