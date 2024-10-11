@@ -3,9 +3,9 @@ const path = require('node:path');
 
 // Mapping of artifacts to their producing repositories
 const artifactToRepositoryMap = {
-  '@cloudscape-design/theming-runtime': '@cloudscape-design/theming-core',
-  '@cloudscape-design/theming-build': '@cloudscape-design/theming-core',
-  '@cloudscape-design/test-utils-core': '@cloudscape-design/test-utils',
+  'cloudscape-design/theming-runtime': 'cloudscape-design/theming-core',
+  'cloudscape-design/theming-build': 'cloudscape-design/theming-core',
+  'cloudscape-design/test-utils-core': 'cloudscape-design/test-utils',
 };
 
 async function loadDependenciesMap() {
