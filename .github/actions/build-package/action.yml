@@ -15,20 +15,13 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Sanitize dependencies
-      if: ${{ inputs.dependencies != '' }}
-      id: sanitize-dependencies
-      shell: bash
-      run: |
-        SANITIZED_DEPENDENCIES=$(echo "${{ inputs.dependencies }}" | sed 's/@//g' | sed 's/\//-/g')
-        echo "sanitized_dependencies=$SANITIZED_DEPENDENCIES" >> $GITHUB_OUTPUT
-
     - name: Download dependencies artifacts
       if: ${{ inputs.dependencies != '' }}
       uses: actions/download-artifact@v4
       with:
-        name: ${{ steps.sanitize-dependencies.outputs.sanitized_dependencies }}
+        pattern: cloudscape-design-*
         path: ./.cache
+        merge-multiple: true
 
     - name: Install dependencies from local tarballs
       if: ${{ inputs.dependencies != '' }}
