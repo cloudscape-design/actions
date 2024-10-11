@@ -30,7 +30,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/create-build-tree@dry-run
         id: set-matrix-output
         with:
-          package: ${{ github.event.repository.full_name }}
+          package: cloudscape-design/test-utils
       - name: Debug matrix output
         run: |
           echo "Level 0: ${{ join(fromJson(steps.set-matrix-output.outputs.matrix)['0'], ',') }}"
