@@ -88,18 +88,18 @@ jobs:
         with:
           package: ${{ matrix.package }}
           dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['2'], ',') }}
-build_level_4:
-  needs:
-    - createBuildTree
-    - build_level_3
-  runs-on: ubuntu-latest
-  if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] != '' }}
-  strategy:
-    matrix:
-      package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] }}
-  steps:
-    - name: Build Level 4
-      uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-      with:
-        package: ${{ matrix.package }}
-        dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}
+  build_level_4:
+    needs:
+      - createBuildTree
+      - build_level_3
+    runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] != '' }}
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] }}
+    steps:
+      - name: Build Level 4
+        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
+        with:
+          package: ${{ matrix.package }}
+          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}
