@@ -16,6 +16,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.package }}
+        path: ${{ inputs.package }}
 
     - name: Download dependencies artifacts
       if: ${{ inputs.dependencies != '' }}
@@ -29,6 +30,7 @@ runs:
     - name: Install dependencies from local tarballs
       if: ${{ inputs.dependencies != '' }}
       shell: bash
+      working-directory: ${{ inputs.package }}
       run: |
         for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
           echo "Installing $package"
@@ -37,15 +39,17 @@ runs:
 
     - name: Install dependencies from npm
       shell: bash
+      working-directory: ${{ inputs.package }}
       run: npm install
 
     - name: Build package
       shell: bash
+      working-directory: ${{ inputs.package }}
       run: npm run build
 
-    # Package each component in ./lib into a .tgz tarball - TODO: Handle single and multiple packages
     - name: Package lib
       shell: bash
+      working-directory: ${{ inputs.package }}
       run: |
         cd ./lib
         if [ -f "package.json" ]; then
@@ -78,4 +82,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.sanitize.outputs.sanitized_name }}
-        path: ./lib/*.tgz
+        path: ${{ inputs.package }}/lib/*.tgz
