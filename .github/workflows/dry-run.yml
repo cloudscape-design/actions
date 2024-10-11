@@ -45,6 +45,7 @@ jobs:
   build_level_1:
     needs: build_level_0
     runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] != '' }}
     strategy:
       matrix:
         package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] }}
@@ -57,6 +58,7 @@ jobs:
   build_level_2:
     needs: build_level_1
     runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] != '' }}
     strategy:
       matrix:
         package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] }}
