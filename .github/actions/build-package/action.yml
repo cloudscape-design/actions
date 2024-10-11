@@ -15,11 +15,18 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Sanitize dependencies
+      if: ${{ inputs.dependencies != '' }}
+      id: sanitize-dependencies
+      run: |
+        SANITIZED_DEPENDENCIES=$(echo "${{ inputs.dependencies }}" | sed 's/@//g' | sed 's/\//-/g')
+        echo "sanitized_dependencies=$SANITIZED_DEPENDENCIES" >> $GITHUB_OUTPUT
+
     - name: Download dependencies artifacts
       if: ${{ inputs.dependencies != '' }}
       uses: actions/download-artifact@v4
       with:
-        name: ${{ inputs.dependencies }}
+        name: ${{ steps.sanitize-dependencies.outputs.sanitized_dependencies }}
         path: ./.cache
 
     - name: Install dependencies from local tarballs
