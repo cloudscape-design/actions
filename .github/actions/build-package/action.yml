@@ -16,9 +16,11 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.package }}
+        path: ${{ inputs.package }}
 
     - name: Download dependencies artifacts
       if: ${{ inputs.dependencies != '' }}
+      id: download-artifacts
       uses: actions/download-artifact@v4
       with:
         pattern: cloudscape-design-*
@@ -29,7 +31,8 @@ runs:
       if: ${{ inputs.dependencies != '' }}
       shell: bash
       run: |
-        for package in $(ls ./.cache/*.tgz); do
+        for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+          echo "Installing $package"
           npm install "$package"
         done
 
@@ -57,7 +60,7 @@ runs:
             if [ -f "$dir/package.json" ]; then
               cd "$dir"
               npm pack
-              cp *.tgz ../
+              mv *.tgz ../
               cd ..
             else
               echo "No package.json in $dir, skipping npm pack"
