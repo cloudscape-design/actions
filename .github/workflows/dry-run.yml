@@ -103,3 +103,34 @@ jobs:
         with:
           package: ${{ matrix.package }}
           dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}
+
+  # Conditional Test Jobs for "cloudscape-design/components"
+  unit_tests:
+    needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
+    runs-on: ubuntu-latest
+    if: contains(matrix.package, 'cloudscape-design/components')
+    steps:
+      - name: Run Unit Tests
+        uses: cloudscape-design/actions/.github/actions/test-components/unit-tests-action@dry-run
+        with:
+          package: ${{ matrix.package }}
+
+  # integration_tests:
+  #   needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
+  #   runs-on: ubuntu-latest
+  #   if: contains(matrix.package, 'cloudscape-design/components')
+  #   steps:
+  #     - name: Run Integration Tests
+  #       uses: cloudscape-design/actions/.github/actions/test-components/integration-test@dry-run
+  #       with:
+  #         package: ${{ matrix.package }}
+
+  # a11y_tests:
+  #   needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
+  #   runs-on: ubuntu-latest
+  #   if: contains(matrix.package, 'cloudscape-design/components')
+  #   steps:
+  #     - name: Run A11y Tests
+  #       uses: cloudscape-design/actions/.github/actions/test-components/a11y-test@dry-run
+  #       with:
+  #         package: ${{ matrix.package }}

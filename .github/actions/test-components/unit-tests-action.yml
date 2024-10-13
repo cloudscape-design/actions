@@ -1,0 +1,36 @@
+name: Run component unit tests
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.package }}
+        path: ${{ inputs.package }}
+
+    - name: Restore cached lib folder
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.package }}/lib
+        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
+
+    - name: Install dependencies from local tarballs
+      if: ${{ inputs.dependencies != '' }}
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      run: |
+        for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+          echo "Installing $package"
+          npm install --no-save "$package"
+        done
+
+    - name: Install dependencies from npm
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      run: npm install
+
+    - name: Run Unit Tests
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      run: npm run test:unit
