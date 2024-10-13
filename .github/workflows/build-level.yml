@@ -31,7 +31,7 @@ jobs:
     if: ${{ contains(inputs.packages, 'cloudscape-design/components') }}
     steps:
       - name: Build and test components
-        uses: cloudscape-design/actions/.github/actions/build-test-components.yml@dry-run
+        uses: cloudscape-design/actions/.github/workflows/build-test-components.yml@dry-run
         with:
           package: cloudscape-design/components
           dependencies: ${{ inputs.dependencies }}
