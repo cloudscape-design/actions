@@ -11,19 +11,10 @@ on:
 permissions:
   contents: read
 
-defaults:
-  run:
-    shell: bash
-
-env:
-  # Disable Husky in CI
-  # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
-  HUSKY: 0
-
 jobs:
   createBuildTree:
-    name: Create build tree
     runs-on: ubuntu-latest
+    name: Create build tree
     outputs:
       matrix: ${{ steps.set-matrix-output.outputs.matrix }}
     steps:
@@ -32,105 +23,57 @@ jobs:
         with:
           package: ${{ github.event.repository.full_name }}
 
-  build_level_0:
+  build_and_test_level_0:
     needs: createBuildTree
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['0'] }}
-    steps:
-      - name: Build Level 0
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
-  build_level_1:
-    needs:
-      - createBuildTree
-      - build_level_0
-    runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] != '' }}
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] }}
-    steps:
-      - name: Build Level 1
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
-          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['0'], ',') }}
-  build_level_2:
-    needs:
-      - createBuildTree
-      - build_level_1
-    runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] != '' }}
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] }}
-    steps:
-      - name: Build Level 2
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
-          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['1'], ',') }}
-  build_level_3:
-    needs:
-      - createBuildTree
-      - build_level_2
-    runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] != '' }}
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] }}
-    steps:
-      - name: Build Level 3
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
-          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['2'], ',') }}
-  build_level_4:
-    needs:
-      - createBuildTree
-      - build_level_3
-    runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] != '' }}
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] }}
-    steps:
-      - name: Build Level 4
-        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
-        with:
-          package: ${{ matrix.package }}
-          dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}
+    uses: cloudscape-design/actions/.github/workflows/build-level.yml@dry-run
+    with:
+      packages: ${{ toJson(fromJson(needs.createBuildTree.outputs.matrix)['0']) }}
 
-  # Conditional Test Jobs for "cloudscape-design/components"
-  unit_tests:
-    needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
-    runs-on: ubuntu-latest
-    if: contains(matrix.package, 'cloudscape-design/components')
-    steps:
-      - name: Run Unit Tests
-        uses: cloudscape-design/actions/.github/actions/test-components/unit-tests-action@dry-run
-        with:
-          package: ${{ matrix.package }}
-
-  # integration_tests:
-  #   needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
-  #   runs-on: ubuntu-latest
-  #   if: contains(matrix.package, 'cloudscape-design/components')
+  # build_and_test_level_1:
+  #   needs: build_and_test_level_0
+  #   if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] != '' }}
+  #   uses: cloudscape-design/actions/.github/workflows/build-test.yml@dry-run
+  #   strategy:
+  #     matrix:
+  #       package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['1'] }}
   #   steps:
-  #     - name: Run Integration Tests
-  #       uses: cloudscape-design/actions/.github/actions/test-components/integration-test@dry-run
+  #     - uses: cloudscape-design/actions/.github/workflows/build-test.yml@dry-run
   #       with:
   #         package: ${{ matrix.package }}
+  #         dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['0'], ',') }}
 
-  # a11y_tests:
-  #   needs: [build_level_0, build_level_1, build_level_2, build_level_3, build_level_4]
-  #   runs-on: ubuntu-latest
-  #   if: contains(matrix.package, 'cloudscape-design/components')
+  # build_and_test_level_2:
+  #   needs: build_and_test_level_1
+  #   if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] != '' }}
+  #   strategy:
+  #     matrix:
+  #       package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['2'] }}
   #   steps:
-  #     - name: Run A11y Tests
-  #       uses: cloudscape-design/actions/.github/actions/test-components/a11y-test@dry-run
+  #     - uses: cloudscape-design/actions/.github/workflows/build-test.yml@dry-run
   #       with:
   #         package: ${{ matrix.package }}
+  #         dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['1'], ',') }}
+
+  # build_and_test_level_3:
+  #   needs: build_and_test_level_2
+  #   if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] != '' }}
+  #   strategy:
+  #     matrix:
+  #       package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['3'] }}
+  #   steps:
+  #     - uses: cloudscape-design/actions/.github/workflows/build-test.yml@dry-run
+  #       with:
+  #         package: ${{ matrix.package }}
+  #         dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['2'], ',') }}
+
+  # build_and_test_level_4:
+  #   needs: build_and_test_level_3
+  #   if: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] != '' }}
+  #   strategy:
+  #     matrix:
+  #       package: ${{ fromJson(needs.createBuildTree.outputs.matrix)['4'] }}
+  #   steps:
+  #     - uses: cloudscape-design/actions/.github/workflows/build-test.yml@dry-run
+  #       with:
+  #         package: ${{ matrix.package }}
+  #         dependencies: ${{ join(fromJson(needs.createBuildTree.outputs.matrix)['3'], ',') }}

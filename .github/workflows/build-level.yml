@@ -1,0 +1,37 @@
+name: Build level
+
+on:
+  workflow_call:
+    inputs:
+      packages:
+        description: Comma-separated list of packages to build
+        required: true
+        type: string
+      dependencies:
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ inputs.packages }}
+    steps:
+      - name: Build package
+        if: ${{ matrix.package != 'cloudscape-design/components' }}
+        uses: cloudscape-design/actions/.github/actions/build-package.yml@dry-run
+        with:
+          package: ${{ matrix.package }}
+          dependencies: ${{ inputs.dependencies }}
+
+  build-test-components:
+    runs-on: ubuntu-latest
+    if: ${{ contains(inputs.packages, 'cloudscape-design/components') }}
+    steps:
+      - name: Build and test components
+        uses: cloudscape-design/actions/.github/actions/build-test-components.yml@dry-run
+        with:
+          package: cloudscape-design/components
+          dependencies: ${{ inputs.dependencies }}

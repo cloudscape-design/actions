@@ -1,0 +1,62 @@
+name: Build and Test
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        required: true
+        type: string
+      dependencies:
+        required: false
+        type: string
+        default: ''
+      skip_lint:
+        required: false
+        type: boolean
+        default: false         
+      skip_tests:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
+        with:
+          package: ${{ inputs.package }}
+          dependencies: ${{ inputs.dependencies }}
+          skip_tests: ${{ inputs.skip_tests }}
+          skip_lint: ${{ inputs.skip_lint }}
+
+  unit_tests:
+    needs: build
+    runs-on: ubuntu-latest
+    if: contains(inputs.package, 'cloudscape-design/components')
+    steps:
+      - name: Run Unit Tests
+        uses: cloudscape-design/actions/.github/actions/test-components/unit-tests-action@dry-run
+        with:
+          package: ${{ inputs.package }}
+
+  # integration_tests:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: contains(inputs.package, 'cloudscape-design/components')
+  #   steps:
+  #     - name: Run Integration Tests
+  #       uses: cloudscape-design/actions/.github/actions/test-components/integration-test-action@dry-run
+  #       with:
+  #         package: ${{ inputs.package }}
+
+  # a11y_tests:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: contains(inputs.package, 'cloudscape-design/components')
+  #   steps:
+  #     - name: Run A11y Tests
+  #       uses: cloudscape-design/actions/.github/actions/test-components/a11y-test-action@dry-run
+  #       with:
+  #         package: ${{ inputs.package }}
