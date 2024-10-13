@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Build package
         if: ${{ matrix.package != 'cloudscape-design/components' }}
-        uses: cloudscape-design/actions/.github/actions/build-package.yml@dry-run
+        uses: cloudscape-design/actions/.github/actions/build-package@dry-run
         with:
           package: ${{ matrix.package }}
           dependencies: ${{ inputs.dependencies }}
