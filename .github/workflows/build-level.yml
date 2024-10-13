@@ -27,8 +27,9 @@ jobs:
           dependencies: ${{ inputs.dependencies }}
 
   build-test-components:
-    runs-on: ubuntu-latest
-    if: ${{ contains(inputs.packages, 'cloudscape-design/components') }}
     uses: cloudscape-design/actions/.github/workflows/build-test-components.yml@dry-run
+    with:
+      dependencies: ${{ inputs.dependencies }}
+      skip_lint: true
 
         
