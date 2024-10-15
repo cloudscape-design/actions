@@ -198,9 +198,12 @@ jobs:
       - name: Unit tests
         run: npm run test:unit
 
-  integTest:
-    name: Components integration tests
+  integTestShards:
+    name: Components integration tests shard
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
     needs:
       - buildComponents
     steps:
@@ -215,7 +218,15 @@ jobs:
       - name: Unpack components artifacts
         run: tar -xzf components-full.tgz
       - name: Integration tests
-        run: npm run test:integ
+        run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+
+  integTest:
+    name: Components integration tests
+    runs-on: ubuntu-latest
+    needs:
+      - integTestShards
+    steps:
+      - run: echo "Completed all integration tests"
 
   motionTest:
     name: Components motion tests
