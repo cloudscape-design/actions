@@ -129,7 +129,7 @@ jobs:
       - buildComponents
     steps:
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
@@ -150,7 +150,7 @@ jobs:
       - buildComponents
     steps:
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
@@ -171,7 +171,7 @@ jobs:
       - buildComponents
     steps:
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
@@ -190,7 +190,7 @@ jobs:
         with:
           node-version: 18
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - name: Unpack components artifacts
@@ -212,7 +212,7 @@ jobs:
         with:
           node-version: 18
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - name: Unpack components artifacts
@@ -239,7 +239,7 @@ jobs:
         with:
           node-version: 18
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - name: Unpack components artifacts
@@ -269,7 +269,7 @@ jobs:
         with:
           node-version: 18
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - name: Unpack components artifacts
@@ -292,7 +292,7 @@ jobs:
       - buildThemingCore
     steps:
       - name: Download component artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: components-package
       - name: Build
