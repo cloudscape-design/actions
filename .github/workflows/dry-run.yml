@@ -170,8 +170,8 @@ jobs:
       - name: Restore cached lib folder
         uses: actions/cache@v4
         with:
-        path: ${{ inputs.package }}/lib
-        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+          path: ${{ inputs.package }}/lib
+          key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
       - name: Install dependencies from local tarballs
         shell: bash
         working-directory: ${{ inputs.package }}
@@ -205,8 +205,8 @@ jobs:
       - name: Restore cached lib folder
         uses: actions/cache@v4
         with:
-        path: ${{ inputs.package }}/lib
-        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+          path: ${{ inputs.package }}/lib
+          key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
       - name: Install dependencies from local tarballs
         shell: bash
         working-directory: ${{ inputs.package }}
@@ -243,8 +243,8 @@ jobs:
       - name: Restore cached lib folder
         uses: actions/cache@v4
         with:
-        path: ${{ inputs.package }}/lib
-        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+          path: ${{ inputs.package }}/lib
+          key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
       - name: Install dependencies from local tarballs
         shell: bash
         working-directory: ${{ inputs.package }}
@@ -284,8 +284,8 @@ jobs:
       - name: Restore cached lib folder
         uses: actions/cache@v4
         with:
-        path: ${{ inputs.package }}/lib
-        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+          path: ${{ inputs.package }}/lib
+          key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
       - name: Install dependencies from local tarballs
         shell: bash
         working-directory: ${{ inputs.package }}
