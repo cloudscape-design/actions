@@ -13,6 +13,10 @@ inputs:
     type: boolean
     default: false
 
+defaults:
+  run:
+    shell: bash
+
 runs:
   using: composite
   steps:
@@ -21,6 +25,9 @@ runs:
       with:
         repository: ${{ inputs.package }}
         path: ${{ inputs.package }}
+
+    - name: Unlock dependencies
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@artifacts-v4
 
     - name: Download dependencies artifacts
       id: download-artifacts
@@ -48,16 +55,26 @@ runs:
       shell: bash
       working-directory: ${{ inputs.package }}
       run: npm run build
+
+    - name: Lint
+      if: ${{ inputs.skip_lint != 'true' }}
+      shell: bash
+      run: npm run lint
+      working-directory: ${{ inputs.package }
+
+    - name: Test
+      if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
+      run: npm run test
+      working-directory: ${{ inputs.package }}
+      if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
+      run: npm run test:unit
+      working-directory: ${{ inputs.package }}
+
     - name: Cache lib folder
       uses: actions/cache@v4
       with:
         path: ${{ inputs.package }}/lib
         key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
-    - name: Test
-      if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
-      shell: bash
-      run: npm test
-      working-directory: ${{ inputs.package }}
 
     - name: Package lib
       shell: bash
