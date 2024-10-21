@@ -178,7 +178,6 @@ jobs:
           path: cloudscape-design/components/lib
           key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
-        shell: bash
         working-directory: cloudscape-design/components
         run: |
           for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
@@ -186,11 +185,9 @@ jobs:
             npm install --no-save "$package"
           done
       - name: Install dependencies from npm
-        shell: bash
         working-directory: cloudscape-design/components
         run: npm install
       - name: Run Unit Tests
-        shell: bash
         working-directory: cloudscape-design/components
         run: npm run test:unit
 
@@ -218,7 +215,6 @@ jobs:
           path: cloudscape-design/components/lib
           key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
-        shell: bash
         working-directory: cloudscape-design/components
         run: |
           for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
@@ -226,10 +222,10 @@ jobs:
             npm install --no-save "$package"
           done
       - name: Install dependencies from npm
-        shell: bash
         working-directory: cloudscape-design/components
         run: npm install
       - name: Integration tests
+        working-directory: cloudscape-design/components      
         run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
   integTest:
@@ -261,7 +257,6 @@ jobs:
           path: cloudscape-design/components/lib
           key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
-        shell: bash
         working-directory: cloudscape-design/components
         run: |
           for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
@@ -269,10 +264,10 @@ jobs:
             npm install --no-save "$package"
           done
       - name: Install dependencies from npm
-        shell: bash
         working-directory: cloudscape-design/components
         run: npm install
       - name: Motion tests
+        working-directory: cloudscape-design/components      
         run: npm run test:motion
 
   a11yTest:
@@ -307,7 +302,6 @@ jobs:
           path: cloudscape-design/components/lib
           key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
-        shell: bash
         working-directory: cloudscape-design/components
         run: |
           for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
@@ -315,10 +309,10 @@ jobs:
             npm install --no-save "$package"
           done
       - name: Install dependencies from npm
-        shell: bash
         working-directory: cloudscape-design/components
         run: npm install
       - name: Accessibility tests
+        working-directory: cloudscape-design/components      
         run: npm run test:a11y -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
   demosTest:
