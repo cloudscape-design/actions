@@ -60,13 +60,17 @@ runs:
       if: ${{ inputs.skip_lint != 'true' }}
       shell: bash
       run: npm run lint
-      working-directory: ${{ inputs.package }
+      working-directory: ${{ inputs.package }}
 
     - name: Test
       if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
+      shell: bash
       run: npm run test
       working-directory: ${{ inputs.package }}
+
+    - name: Test:components      
       if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
+      shell: bash
       run: npm run test:unit
       working-directory: ${{ inputs.package }}
 
