@@ -71,7 +71,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/test-utils
-          download_dependencies: true
   buildThemingCore:
     name: Build theming-core
     runs-on: ubuntu-latest
@@ -82,8 +81,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/theming-core
-          artifact_path: theming-*.tgz
-          download_dependencies: true
   buildComponentToolkit:
     name: Build component-toolkit
     runs-on: ubuntu-latest
@@ -93,7 +90,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/component-toolkit
-          download_dependencies: true
   buildComponents:
     name: Build components
     runs-on: ubuntu-latest
@@ -111,10 +107,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/components
-          target_artifact: components-package
-          artifact_path: ./*.tgz
           skip_tests: true
-          download_dependencies: true
 
   buildBoardComponents:
     name: Build board components
@@ -135,7 +128,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/board-components
-          download_dependencies: true
 
   buildCodeView:
     name: Build code view components
@@ -156,7 +148,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/code-view
-          download_dependencies: true
 
   buildChatComponents:
     name: Build chat components
@@ -177,7 +168,6 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/chat-components
-          download_dependencies: true
 
   unitTest:
     name: Components unit tests
@@ -299,4 +289,3 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/demos
-          download_dependencies: true
