@@ -121,10 +121,6 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/board-components
@@ -141,10 +137,6 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/code-view
@@ -161,10 +153,6 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/chat-components
@@ -179,13 +167,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
+      - name: Restore cached lib folder
+        uses: actions/cache@v4
         with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
-      - name: Unit tests
+        path: ${{ inputs.package }}/lib
+        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+      - name: Install dependencies from local tarballs
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: |
+          for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+            echo "Installing $package"
+            npm install --no-save "$package"
+          done
+      - name: Install dependencies from npm
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: npm install
+      - name: Run Unit Tests
+        shell: bash
+        working-directory: ${{ inputs.package }}
         run: npm run test:unit
 
   integTestShards:
@@ -201,12 +202,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
+      - name: Restore cached lib folder
+        uses: actions/cache@v4
         with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+        path: ${{ inputs.package }}/lib
+        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+      - name: Install dependencies from local tarballs
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: |
+          for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+            echo "Installing $package"
+            npm install --no-save "$package"
+          done
+      - name: Install dependencies from npm
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: npm install
       - name: Integration tests
         run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
@@ -228,12 +240,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
+      - name: Restore cached lib folder
+        uses: actions/cache@v4
         with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+        path: ${{ inputs.package }}/lib
+        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+      - name: Install dependencies from local tarballs
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: |
+          for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+            echo "Installing $package"
+            npm install --no-save "$package"
+          done
+      - name: Install dependencies from npm
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: npm install
       - name: Motion tests
         run: npm run test:motion
 
@@ -258,12 +281,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
+      - name: Restore cached lib folder
+        uses: actions/cache@v4
         with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+        path: ${{ inputs.package }}/lib
+        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}          
+      - name: Install dependencies from local tarballs
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: |
+          for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+            echo "Installing $package"
+            npm install --no-save "$package"
+          done
+      - name: Install dependencies from npm
+        shell: bash
+        working-directory: ${{ inputs.package }}
+        run: npm install
       - name: Accessibility tests
         run: npm run test:a11y -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
@@ -281,10 +315,6 @@ jobs:
       - buildGlobalStyles
       - buildThemingCore
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - name: Build
         uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
