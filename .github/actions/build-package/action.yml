@@ -4,10 +4,6 @@ inputs:
   package:
     description: Name of the package
     required: true
-  dependencies:
-    description: List of dependencies
-    required: true
-    default: ''
   skip_lint:
     required: false
     type: boolean
@@ -27,7 +23,6 @@ runs:
         path: ${{ inputs.package }}
 
     - name: Download dependencies artifacts
-      if: ${{ inputs.dependencies != '' }}
       id: download-artifacts
       uses: actions/download-artifact@v4
       with:
@@ -36,7 +31,6 @@ runs:
         merge-multiple: true
 
     - name: Install dependencies from local tarballs
-      if: ${{ inputs.dependencies != '' }}
       shell: bash
       working-directory: ${{ inputs.package }}
       run: |
