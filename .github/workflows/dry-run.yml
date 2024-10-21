@@ -163,6 +163,11 @@ jobs:
     needs:
       - buildComponents
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: cloudscape-design/components
+          path: cloudscape-design/components
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -170,11 +175,11 @@ jobs:
       - name: Restore cached lib folder
         uses: actions/cache@v4
         with:
-          path: ${{ inputs.package }}/lib
-          key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
+          path: cloudscape-design/components/lib
+          key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
         shell: bash
-        working-directory: ${{ inputs.package }}
+        working-directory: cloudscape-design/components
         run: |
           for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
             echo "Installing $package"
@@ -182,11 +187,11 @@ jobs:
           done
       - name: Install dependencies from npm
         shell: bash
-        working-directory: ${{ inputs.package }}
+        working-directory: cloudscape-design/components
         run: npm install
       - name: Run Unit Tests
         shell: bash
-        working-directory: ${{ inputs.package }}
+        working-directory: cloudscape-design/components
         run: npm run test:unit
 
   integTestShards:
