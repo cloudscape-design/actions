@@ -27,42 +27,42 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: build-tools
+          package: cloudscape-design/build-tools
   buildJestPreset:
     name: Build jest-preset
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: jest-preset
+          package: cloudscape-design/jest-preset
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: global-styles
+          package: cloudscape-design/global-styles
   buildCollectionHooks:
     name: Build collection-hooks
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: collection-hooks
+          package: cloudscape-design/collection-hooks
   buildBrowserTestTools:
     name: Build browser-test-tools
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: browser-test-tools
+          package: cloudscape-design/browser-test-tools
   buildDocumenter:
     name: Build documenter
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: documenter
+          package: cloudscape-design/documenter
   buildTestUtils:
     name: Build test-utils
     runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: test-utils
+          package: cloudscape-design/test-utils
           download_dependencies: true
   buildThemingCore:
     name: Build theming-core
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: theming-core
+          package: cloudscape-design/theming-core
           artifact_path: theming-*.tgz
           download_dependencies: true
   buildComponentToolkit:
@@ -92,7 +92,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: component-toolkit
+          package: cloudscape-design/component-toolkit
           download_dependencies: true
   buildComponents:
     name: Build components
@@ -110,7 +110,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: components
+          package: cloudscape-design/components
           target_artifact: components-package
           artifact_path: ./*.tgz
           skip_tests: true
@@ -134,7 +134,7 @@ jobs:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: board-components
+          package: cloudscape-design/board-components
           download_dependencies: true
 
   buildCodeView:
@@ -155,7 +155,7 @@ jobs:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: code-view
+          package: cloudscape-design/code-view
           download_dependencies: true
 
   buildChatComponents:
@@ -176,7 +176,7 @@ jobs:
           name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: chat-components
+          package: cloudscape-design/chat-components
           download_dependencies: true
 
   unitTest:
@@ -298,5 +298,5 @@ jobs:
       - name: Build
         uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
-          package: demos
+          package: cloudscape-design/demos
           download_dependencies: true
