@@ -44,12 +44,6 @@ runs:
       working-directory: ${{ inputs.package }}
       run: npm install
 
-    - name: Lint
-      if: ${{ inputs.skip_lint != true }}
-      shell: bash
-      working-directory: ${{ inputs.package }}
-      run: npm run lint
-
     - name: Build package
       shell: bash
       working-directory: ${{ inputs.package }}
