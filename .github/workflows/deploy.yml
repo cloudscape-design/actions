@@ -27,13 +27,13 @@ jobs:
       url: ${{ steps.deploy.outputs.preview-url }}index.html
     steps:
       - name: Download artifact
-        uses: cloudscape-design/actions/.github/actions/download-artifact@main
+        uses: cloudscape-design/actions/.github/actions/download-artifact@artifacts-v4
         with:
           name: ${{ inputs.artifact-name }}
           path: build
       - name: Deploy dev-pages
         id: deploy
-        uses: cloudscape-design/actions/.github/actions/deploy-static@main
+        uses: cloudscape-design/actions/.github/actions/deploy-static@artifacts-v4
         with:
           role-to-assume: ${{ secrets.AWS_PREVIEW_ROLE_ARN }}
           deployment-bucket: ${{ secrets.AWS_PREVIEW_BUCKET_NAME }}
