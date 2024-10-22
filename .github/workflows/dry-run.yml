@@ -167,7 +167,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/cache@v4
         with:
-          key: cloudscape-design/components-${{ github.sha }}
+          key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ github.workspace }}
       - name: Run Unit Tests
         run: npm run test:unit
@@ -184,7 +184,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/cache@v4
         with:
-          key: cloudscape-design/components-${{ github.sha }}
+          key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
           restore-keys: |
             cloudscape-design/components-
           path: ${{ github.workspace }}
@@ -200,7 +200,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/cache@v4
         with:
-          key: cloudscape-design/components-${{ github.sha }}
+          key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
           restore-keys: |
             cloudscape-design/components-          
           path: ${{ github.workspace }}
@@ -219,7 +219,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/cache@v4
         with:
-          key: cloudscape-design/components-${{ github.sha }}
+          key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
           restore-keys: |
             cloudscape-design/components-          
           path: ${{ github.workspace }}
