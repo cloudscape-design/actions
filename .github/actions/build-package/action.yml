@@ -28,7 +28,7 @@ runs:
     - name: Set-up node
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 20        
 
     - name: Download dependencies artifacts
       id: download-artifacts
@@ -39,6 +39,7 @@ runs:
         merge-multiple: true
 
     - name: Install dependencies from local tarballs
+      shell: bash
       working-directory: ${{ inputs.package }}
       run: |
         for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
@@ -47,25 +48,30 @@ runs:
         done
 
     - name: Install dependencies from npm
+      shell: bash
       working-directory: ${{ inputs.package }}
       run: npm install
 
     - name: Build package
+      shell: bash
       working-directory: ${{ inputs.package }}
       run: npm run build
 
     - name: Lint
       if: ${{ inputs.skip_lint != 'true' }}
+      shell: bash
       run: npm run lint
       working-directory: ${{ inputs.package }}
 
     - name: Test
       if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
+      shell: bash
       run: npm run test
       working-directory: ${{ inputs.package }}
 
     - name: Test:components      
       if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
+      shell: bash
       run: npm run test:unit
       working-directory: ${{ inputs.package }}
 
@@ -76,6 +82,7 @@ runs:
         key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
 
     - name: Package lib
+      shell: bash
       working-directory: ${{ inputs.package }}
       run: |
         cd ./lib
@@ -99,6 +106,7 @@ runs:
         fi
 
     - name: Sanitize package name
+      shell: bash
       id: sanitize
       run: |
         SANITIZED_NAME=$(echo "${{ inputs.package }}" | sed 's/@//g' | sed 's/\//-/g')
