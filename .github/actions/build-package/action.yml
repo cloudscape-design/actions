@@ -28,7 +28,6 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.package }}
-        path: ${{ inputs.package }}
     - name: Set-up node
       uses: actions/setup-node@v4
       with:
@@ -44,7 +43,6 @@ runs:
 
     - name: Install dependencies from local tarballs
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: |
         for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
           echo "Installing $package"
@@ -53,42 +51,36 @@ runs:
 
     - name: Install dependencies from npm
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: npm install
 
     - name: Build package
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: npm run build
 
     - name: Lint
       if: ${{ inputs.skip_lint != 'true' }}
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: npm run lint
 
     - name: Test
       if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: npm run test
 
     - name: Test:components      
       if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: npm run test:unit      
 
     - name: Cache working directory folder
       if: ${{ inputs.cache_working_directory == 'true' }}
       uses: actions/cache@v4
       with:
-        path: ${{ inputs.package }}
+        path: lib
         key: ${{ inputs.package }}-${{ github.sha }}
 
     - name: Package lib
       shell: bash
-      working-directory: ${{ inputs.package }}
       run: |
         cd ./lib
         if [ -f "package.json" ]; then
