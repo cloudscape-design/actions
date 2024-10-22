@@ -28,7 +28,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/components
-          skip_tests: false
+          skip_tests: true
           cache_working_directory: true
 
   unitTest:
