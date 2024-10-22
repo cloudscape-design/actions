@@ -28,7 +28,8 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-package@artifacts-v4
         with:
           package: cloudscape-design/components
-          skip_tests: true
+          skip_tests: false
+          cache_working_directory: true
 
   unitTest:
     name: Components unit tests
@@ -36,28 +37,9 @@ jobs:
     needs:
       - buildComponents
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Restore cached working directory
+        uses: actions/cache@v4
         with:
-          repository: cloudscape-design/components
-          path: cloudscape-design/components
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install dependencies from local tarballs
-        working-directory: cloudscape-design/components
-        run: |
-          for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
-            echo "Installing $package"
-            npm install --no-save "$package"
-          done
-      - name: Install dependencies from npm
-        working-directory: cloudscape-design/components
-        run: npm install
-      - name: Build
-        working-directory: cloudscape-design/components
-        run: npm run build
+          key: cloudscape-design/components-${{ github.sha }}
       - name: Run Unit Tests
-        working-directory: cloudscape-design/components
         run: npm run test:unit

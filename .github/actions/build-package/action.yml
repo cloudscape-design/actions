@@ -12,6 +12,10 @@ inputs:
     required: false
     type: boolean
     default: false
+  cache_working_directory:
+    required: false
+    type: boolean
+    default: false
 
 defaults:
   run:
@@ -73,7 +77,14 @@ runs:
       if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
       shell: bash
       working-directory: ${{ inputs.package }}
-      run: npm run test:unit
+      run: npm run test:unit      
+
+    - name: Cache working directory folder
+      if: ${{ inputs.cache_working_directory == 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.package }}
+        key: ${{ inputs.package }}-${{ github.sha }}
 
     - name: Package lib
       shell: bash
