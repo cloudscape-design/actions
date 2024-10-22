@@ -33,6 +33,9 @@ runs:
       with:
         node-version: 20        
 
+    - name: Unlock dependencies
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@artifacts-v4
+
     - name: Download dependencies artifacts
       id: download-artifacts
       uses: actions/download-artifact@v4
