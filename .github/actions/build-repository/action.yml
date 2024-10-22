@@ -1,0 +1,126 @@
+name: Build repository
+description: Builds a repository
+inputs:
+  repository:
+    description: Name of the repository
+    required: true
+  skip_lint:
+    required: false
+    type: boolean
+    default: true
+  skip_tests:
+    required: false
+    type: boolean
+    default: false
+  cache_working_directory:
+    required: false
+    type: boolean
+    default: false
+  artifact-path:
+    type: string
+    description: An optional file, directory or wildcard pattern that describes what to upload
+    default: ''
+  artifact-name:
+    type: string
+    description: An optional artifact name. Required when artifact-path is specified
+    default: ''
+
+defaults:
+  run:
+    shell: bash
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+    - name: Set-up node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Download dependencies artifacts
+      id: download-artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: cloudscape-design-*
+        path: ./.build-cache
+        merge-multiple: true
+
+    - name: Patch local dependencies
+      uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@main
+      with:
+        path: ${{ github.workspace }}
+
+    - name: Unlock dependencies
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
+    - name: Install
+      shell: bash
+      run: npm install
+    - name: Build
+      shell: bash
+      run: npm run build
+    - name: Lint
+      if: ${{ inputs.skip_lint != 'true' }}
+      shell: bash
+      run: npm run lint
+    - name: Test
+      if: ${{ inputs.skip_tests != 'true' && inputs.repository != 'cloudscape-design/components' }}
+      shell: bash
+      run: npm run test
+    - name: Test:Unit
+      if: ${{ inputs.skip_tests != 'true' && inputs.repository == 'cloudscape-design/components' }}
+      shell: bash
+      run: npm run test:unit
+
+    - name: Cache working directory folder
+      if: ${{ inputs.cache_working_directory == 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}
+        key: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
+
+    - name: Package lib
+      shell: bash
+      run: |
+        cd ./lib
+        if [ -f "package.json" ]; then
+          # If there's a package.json in ./lib, just pack it here
+          echo "Found package.json in ./lib, running npm pack in ./lib"
+          npm pack
+        else
+          # Otherwise, iterate through subdirectories and pack if package.json exists
+          echo "No package.json found in ./lib, iterating through subdirectories"
+          for dir in */; do
+            if [ -f "$dir/package.json" ]; then
+              cd "$dir"
+              npm pack
+              mv *.tgz ../
+              cd ..
+            else
+              echo "No package.json in $dir, skipping npm pack"
+            fi
+          done
+        fi
+
+    - name: Sanitize package name
+      shell: bash
+      id: sanitize
+      run: |
+        SANITIZED_NAME=$(echo "${{ inputs.repository }}" | sed 's/@//g' | sed 's/\//-/g')
+        echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.sanitize.outputs.sanitized_name }}
+        path: lib/*.tgz
+
+    - name: Upload additional artifacts
+      if: ${{ inputs.artifact-path != '' && inputs.artifact-name != '' }}
+      uses: cloudscape-design/actions/.github/actions/upload-artifact@main
+      with:
+        path: ${{ inputs.artifact-path }}
+        name: ${{ inputs.artifact-name }}
