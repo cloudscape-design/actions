@@ -41,5 +41,6 @@ jobs:
         uses: actions/cache@v4
         with:
           key: cloudscape-design/components-${{ github.sha }}
+          path: .
       - name: Run Unit Tests
         run: npm run test:unit
