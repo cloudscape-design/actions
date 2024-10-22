@@ -27,42 +27,42 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: build-tools
+          package: cloudscape-design/build-tools
   buildJestPreset:
     name: Build jest-preset
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: jest-preset
+          package: cloudscape-design/jest-preset
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: global-styles
+          package: cloudscape-design/global-styles
   buildCollectionHooks:
     name: Build collection-hooks
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: collection-hooks
+          package: cloudscape-design/collection-hooks
   buildBrowserTestTools:
     name: Build browser-test-tools
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: browser-test-tools
+          package: cloudscape-design/browser-test-tools
   buildDocumenter:
     name: Build documenter
     runs-on: ubuntu-latest
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: documenter
+          package: cloudscape-design/documenter
   buildTestUtils:
     name: Build test-utils
     runs-on: ubuntu-latest
@@ -70,8 +70,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: test-utils
-          download_dependencies: true
+          package: cloudscape-design/test-utils
   buildThemingCore:
     name: Build theming-core
     runs-on: ubuntu-latest
@@ -81,9 +80,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: theming-core
-          artifact_path: theming-*.tgz
-          download_dependencies: true
+          package: cloudscape-design/theming-core
   buildComponentToolkit:
     name: Build component-toolkit
     runs-on: ubuntu-latest
@@ -92,8 +89,7 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: component-toolkit
-          download_dependencies: true
+          package: cloudscape-design/component-toolkit
   buildComponents:
     name: Build components
     runs-on: ubuntu-latest
@@ -110,11 +106,9 @@ jobs:
     steps:
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: components
-          target_artifact: components-package
-          artifact_path: ./*.tgz
+          package: cloudscape-design/components
           skip_tests: true
-          download_dependencies: true
+          cache_working_directory: true
 
   buildBoardComponents:
     name: Build board components
@@ -128,20 +122,15 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: board-components
-          download_dependencies: true
+          package: cloudscape-design/board-components
 
   buildCodeView:
     name: Build code view components
     runs-on: ubuntu-latest
     needs:
-      - buildBuildTools    
+      - buildBuildTools
       - buildGlobalStyles
       - buildBrowserTestTools
       - buildDocumenter
@@ -149,14 +138,9 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: code-view
-          download_dependencies: true
+          package: cloudscape-design/code-view
 
   buildChatComponents:
     name: Build chat components
@@ -170,14 +154,9 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: chat-components
-          download_dependencies: true
+          package: cloudscape-design/chat-components
 
   unitTest:
     name: Components unit tests
@@ -185,21 +164,16 @@ jobs:
     needs:
       - buildComponents
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Restore cached working directory
+        uses: actions/cache@v4
         with:
-          node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
-      - name: Unit tests
+          key: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ github.workspace }}
+      - name: Run Unit Tests
         run: npm run test:unit
 
-  integTestShards:
-    name: Components integration tests shard
+  integTest:
+    name: Components integration tests shards
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -207,26 +181,15 @@ jobs:
     needs:
       - buildComponents
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Restore cached working directory
+        uses: actions/cache@v4
         with:
-          node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+          key: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          restore-keys: |
+            cloudscape-design/components-
+          path: ${{ github.workspace }}
       - name: Integration tests
         run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
-
-  integTest:
-    name: Components integration tests
-    runs-on: ubuntu-latest
-    needs:
-      - integTestShards
-    steps:
-      - run: echo "Completed all integration tests"
 
   motionTest:
     name: Components motion tests
@@ -234,29 +197,18 @@ jobs:
     needs:
       - buildComponents
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Restore cached working directory
+        uses: actions/cache@v4
         with:
-          node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+          key: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          restore-keys: |
+            cloudscape-design/components-          
+          path: ${{ github.workspace }}
       - name: Motion tests
         run: npm run test:motion
 
   a11yTest:
-    name: Components accessibility tests
-    runs-on: ubuntu-latest
-    needs:
-      - a11yTestShards
-    steps:
-      - run: echo "Completed all accessibility tests"
-
-  a11yTestShards:
-    name: Components accessibility tests shard
+    name: Components accessibility tests shards
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -264,16 +216,13 @@ jobs:
     needs:
       - buildComponents
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Restore cached working directory
+        uses: actions/cache@v4
         with:
-          node-version: 18
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
-      - name: Unpack components artifacts
-        run: tar -xzf components-full.tgz
+          key: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          restore-keys: |
+            cloudscape-design/components-          
+          path: ${{ github.workspace }}
       - name: Accessibility tests
         run: npm run test:a11y -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
@@ -291,12 +240,7 @@ jobs:
       - buildGlobalStyles
       - buildThemingCore
     steps:
-      - name: Download component artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: components-package
       - name: Build
         uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          package: demos
-          download_dependencies: true
+          package: cloudscape-design/demos

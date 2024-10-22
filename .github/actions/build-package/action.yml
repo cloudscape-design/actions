@@ -1,125 +1,119 @@
-name: Build dependency package locally
-description: Checks out a dependency package locally and updates all references to it
+name: Build package
+description: Builds a package
 inputs:
   package:
     description: Name of the package
     required: true
-  download_dependencies:
-    description: Whether to download dependencies
-    default: false
-  skip_build:
-    description: Whether to skip the build
-    default: false
+  skip_lint:
+    required: false
+    type: boolean
+    default: true    
   skip_tests:
-    description: Whether to skip the tests
+    required: false
+    type: boolean
     default: false
-  target_artifact:
-    description: Name of the artifact that will be uploaded
-    default: dependencies
-  artifact_path:
-    description: Path or pattern for the artifact files that should be uploaded
+  cache_working_directory:
+    required: false
+    type: boolean
+    default: false
+
+defaults:
+  run:
+    shell: bash
 
 runs:
   using: composite
   steps:
-    - name: Clone
+    - name: Checkout
       uses: actions/checkout@v4
       with:
-        repository: cloudscape-design/${{ inputs.package }}
-        path: ${{ inputs.package }}
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
+        repository: ${{ inputs.package }}
+    - name: Set-up node
+      uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20        
 
-    - name: Download artifacts
-      if: ${{ inputs.download_dependencies == 'true' }}
-      uses: actions/download-artifact@v3
+    - name: Unlock dependencies
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
+
+    - name: Download dependencies artifacts
+      id: download-artifacts
+      uses: actions/download-artifact@v4
       with:
-        name: dependencies
+        pattern: cloudscape-design-*
+        path: ./.cache
+        merge-multiple: true
 
-    - run: cd ${{ inputs.package }}
+    - name: Install dependencies from local tarballs
       shell: bash
+      run: |
+        for package in $(ls ${{ steps.download-artifacts.outputs.download-path }}/*.tgz); do
+          echo "Installing $package"
+          npm install --no-save "$package"
+        done
 
-    - uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@main
-      with:
-        path: ${{ github.workspace }}/${{ inputs.package }}
-
-    - name: npm install
+    - name: Install dependencies from npm
       shell: bash
       run: npm install
-      working-directory: ${{ inputs.package }}
-    - name: Build
-      if: ${{ inputs.skip_build != 'true' }}
+
+    - name: Build package
       shell: bash
       run: npm run build
-      working-directory: ${{ inputs.package }}
+
+    - name: Lint
+      if: ${{ inputs.skip_lint == 'false' }}
+      shell: bash
+      run: npm run lint
+
     - name: Test
-      if: ${{ inputs.skip_tests != 'true' }}
+      if: ${{ inputs.skip_tests == 'false' && inputs.package != 'cloudscape-design/components' }}
       shell: bash
-      run: npm test
-      working-directory: ${{ inputs.package }}
-    - name: Pack artifacts (lib folder)
-      if: ${{ inputs.package == 'build-tools' || inputs.package == 'component-toolkit' || inputs.package == 'browser-test-tools' || inputs.package == 'documenter' || inputs.package == 'jest-preset' || inputs.package == 'global-styles' ||  inputs.package == 'collection-hooks' }}
-      shell: bash
-      working-directory: ${{ inputs.package }}
-      run: |
-        cd lib
-        npm pack
-        cp *-${{ inputs.package }}-*.tgz $GITHUB_WORKSPACE/${{ inputs.package }}.tgz
+      run: npm run test
 
-    - name: Pack test-utils artifacts
-      if: ${{ inputs.package == 'test-utils' }}
+    - name: Test:components      
+      if: ${{ inputs.skip_tests == 'false' && inputs.package == 'cloudscape-design/components' }}
       shell: bash
-      working-directory: ${{ inputs.package }}
-      run: |
-        cd lib/core
-        npm pack
-        cp *-test-utils-core-*.tgz $GITHUB_WORKSPACE
-        cd ../converter
-        npm pack
-        echo $GITHUB_WORKSPACE
-        cp *-test-utils-converter-*.tgz $GITHUB_WORKSPACE
-        cd $GITHUB_WORKSPACE
-        mv *-test-utils-converter-*.tgz test-utils-converter.tgz
-        mv *-test-utils-core-*.tgz test-utils-core.tgz
+      run: npm run test:unit      
 
-    - name: Pack theming-core artifacts
-      if: ${{ inputs.package == 'theming-core' }}
-      shell: bash
-      working-directory: ${{ inputs.package }}
-      run: |
-        cd lib/browser
-        npm pack
-        cp *-theming-runtime-*.tgz $GITHUB_WORKSPACE
-        cd ../node
-        npm pack
-        echo $GITHUB_WORKSPACE
-        cp *-theming-build-*.tgz $GITHUB_WORKSPACE
-        cd $GITHUB_WORKSPACE
-        mv *-theming-build-*.tgz theming-build.tgz
-        mv *-theming-runtime-*.tgz theming-runtime.tgz
-
-    - name: Package generic components packages
-      if: ${{ inputs.package == 'board-components' || inputs.package == 'code-view' || inputs.package == 'chat-components' }}
-      shell: bash
-      working-directory: ${{ inputs.package }}
-      run: |
-        cd lib/components
-        npm pack
-        cp *-${{ inputs.package }}-*.tgz $GITHUB_WORKSPACE/${{ inputs.package }}.tgz
-
-    - name: Package component files
-      if: ${{ inputs.package == 'components' }}
-      shell: bash
-      working-directory: ${{ inputs.package }}
-      run: |
-        tar -czf ../components-full.tgz  .
-        tar -czf ../components.tgz --directory=lib/components .
-        tar -czf ../design-tokens.tgz --directory=lib/design-tokens .
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+    - name: Cache working directory folder
+      if: ${{ inputs.cache_working_directory == 'true' }}
+      uses: actions/cache@v4
       with:
-        name: ${{ inputs.target_artifact }}
-        path: ${{ inputs.artifact_path || format('{0}*.tgz', inputs.package) }}
+        path: ${{ github.workspace }}
+        key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
+
+    - name: Package lib
+      shell: bash
+      run: |
+        cd ./lib
+        if [ -f "package.json" ]; then
+          # If there's a package.json in ./lib, just pack it here
+          echo "Found package.json in ./lib, running npm pack in ./lib"
+          npm pack
+        else
+          # Otherwise, iterate through subdirectories and pack if package.json exists
+          echo "No package.json found in ./lib, iterating through subdirectories"
+          for dir in */; do
+            if [ -f "$dir/package.json" ]; then
+              cd "$dir"
+              npm pack
+              mv *.tgz ../
+              cd ..
+            else
+              echo "No package.json in $dir, skipping npm pack"
+            fi
+          done
+        fi
+
+    - name: Sanitize package name
+      shell: bash
+      id: sanitize
+      run: |
+        SANITIZED_NAME=$(echo "${{ inputs.package }}" | sed 's/@//g' | sed 's/\//-/g')
+        echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.sanitize.outputs.sanitized_name }}
+        path: lib/*.tgz

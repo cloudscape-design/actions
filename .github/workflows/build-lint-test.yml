@@ -59,21 +59,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Unlock dependencies
-        uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
-      - run: npm install
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
-        if: ${{ github.repository != 'cloudscape-design/components' }}
-      - run: npm run test:unit
-        if: ${{ github.repository == 'cloudscape-design/components' }}
-      - name: Upload Artifacts
-        if: ${{ inputs.artifact-path != '' }}
-        uses: cloudscape-design/actions/.github/actions/upload-artifact@main
+      - name: Build Package
+        uses: cloudscape-design/actions/.github/actions/build-package@main
         with:
-          path: ${{ inputs.artifact-path }}
-          name: ${{ inputs.artifact-name }}
+          package: ${{ github.repository }}
       - name: Codecov
         if: ${{ inputs.skip-codecov == false && always() }}
         uses: codecov/codecov-action@v4
