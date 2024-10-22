@@ -60,26 +60,20 @@ runs:
     - name: Lint
       if: ${{ inputs.skip_lint != 'true' }}
       shell: bash
-      run: npm run lint
       working-directory: ${{ inputs.package }}
+      run: npm run lint
 
     - name: Test
       if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
       shell: bash
-      run: npm run test
       working-directory: ${{ inputs.package }}
+      run: npm run test
 
     - name: Test:components      
       if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
       shell: bash
-      run: npm run test:unit
       working-directory: ${{ inputs.package }}
-
-    - name: Cache lib folder
-      uses: actions/cache@v4
-      with:
-        path: ${{ inputs.package }}/lib
-        key: ${{ runner.os }}-lib-${{ inputs.package }}-${{ github.sha }}
+      run: npm run test:unit
 
     - name: Package lib
       shell: bash

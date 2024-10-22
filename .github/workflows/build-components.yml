@@ -45,11 +45,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Restore cached lib folder
-        uses: actions/cache@v4
-        with:
-          path: cloudscape-design/components/lib
-          key: ${{ runner.os }}-lib-cloudscape-design/components-${{ github.sha }}
       - name: Install dependencies from local tarballs
         working-directory: cloudscape-design/components
         run: |
@@ -60,6 +55,9 @@ jobs:
       - name: Install dependencies from npm
         working-directory: cloudscape-design/components
         run: npm install
+      - name: Build
+        working-directory: cloudscape-design/components
+        run: npm run build
       - name: Run Unit Tests
         working-directory: cloudscape-design/components
         run: npm run test:unit
