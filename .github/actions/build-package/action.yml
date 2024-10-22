@@ -61,17 +61,17 @@ runs:
       run: npm run build
 
     - name: Lint
-      if: ${{ inputs.skip_lint != 'true' }}
+      if: ${{ inputs.skip_lint == 'false' }}
       shell: bash
       run: npm run lint
 
     - name: Test
-      if: ${{ inputs.skip_tests != 'true' && inputs.package != 'cloudscape-design/components' }}
+      if: ${{ inputs.skip_tests == 'false' && inputs.package != 'cloudscape-design/components' }}
       shell: bash
       run: npm run test
 
     - name: Test:components      
-      if: ${{ inputs.skip_tests != 'true' && inputs.package == 'cloudscape-design/components' }}
+      if: ${{ inputs.skip_tests == 'false' && inputs.package == 'cloudscape-design/components' }}
       shell: bash
       run: npm run test:unit      
 
@@ -80,7 +80,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}
-        key: ${{ inputs.package }}-${{ github.sha }}
+        key: ${{ inputs.package }}-${{ github.event.pull_request.head.sha || github.sha }}
 
     - name: Package lib
       shell: bash
