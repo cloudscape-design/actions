@@ -27,8 +27,8 @@ runs:
         path: ${{ inputs.package }}
 
     - name: Unlock dependencies
-      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@artifacts-v4
       working-directory: ${{ inputs.package }}
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@artifacts-v4
 
     - name: Download dependencies artifacts
       id: download-artifacts
