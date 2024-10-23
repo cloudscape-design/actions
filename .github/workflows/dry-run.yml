@@ -25,42 +25,42 @@ jobs:
     name: Build build-tools
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/build-tools
   buildJestPreset:
     name: Build jest-preset
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/jest-preset
   buildGlobalStyles:
     name: Build global-styles
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/global-styles
   buildCollectionHooks:
     name: Build collection-hooks
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/collection-hooks
   buildBrowserTestTools:
     name: Build browser-test-tools
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/browser-test-tools
   buildDocumenter:
     name: Build documenter
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/documenter
   buildTestUtils:
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: buildDocumenter
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/test-utils
   buildThemingCore:
@@ -78,7 +78,7 @@ jobs:
       - buildBrowserTestTools
       - buildComponentToolkit
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/theming-core
   buildComponentToolkit:
@@ -87,7 +87,7 @@ jobs:
     needs:
       - buildBrowserTestTools
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/component-toolkit
   buildComponents:
@@ -104,7 +104,7 @@ jobs:
       - buildThemingCore
       - buildComponentToolkit
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/components
           skip-tests: true
@@ -122,7 +122,7 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/board-components
 
@@ -138,7 +138,7 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/code-view
 
@@ -154,7 +154,7 @@ jobs:
       - buildComponentToolkit
       - buildComponents
     steps:
-      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+      - uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/chat-components
 
@@ -257,6 +257,6 @@ jobs:
       - buildThemingCore
     steps:
       - name: Build
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@test/use-build-repository
         with:
           repository: cloudscape-design/demos
