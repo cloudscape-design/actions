@@ -51,7 +51,7 @@ runs:
 
     - name: Patch local dependencies
       uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@test/use-build-repository
-`      with:
+      with:
         path: ${{ github.workspace }}
 
     - name: Unlock dependencies
