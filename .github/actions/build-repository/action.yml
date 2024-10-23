@@ -114,7 +114,7 @@ runs:
       shell: bash
       id: sanitize
       run: |
-        SANITIZED_NAME=$(echo "${{ inputs.repository }}" | sed 's/^@cloudscape-design\///')
+        SANITIZED_NAME=$(echo "${{ inputs.repository }}" | sed 's/@//g' | sed 's/\//-/g')
         echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
 
     - name: Upload build artifacts
