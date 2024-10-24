@@ -27,7 +27,7 @@ jobs:
       url: ${{ steps.deploy.outputs.preview-url }}index.html
     steps:
       - name: Download artifact
-        uses: cloudscape-design/actions/.github/actions/download-artifact@main
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
           path: build
@@ -37,5 +37,5 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_PREVIEW_ROLE_ARN }}
           deployment-bucket: ${{ secrets.AWS_PREVIEW_BUCKET_NAME }}
-          source-path: build/${{ inputs.deployment-path }}
+          source-path: build
           target-path: ${{ inputs.artifact-name }}

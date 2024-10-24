@@ -3,6 +3,10 @@ name: Build, lint and test
 on:
   workflow_call:
     inputs:
+      skip-tests:
+        required: false
+        type: boolean
+        default: false    
       skip-codeql:
         type: boolean
         description: Skip CodeQL checks
@@ -56,24 +60,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - name: Unlock dependencies
-        uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
-      - run: npm install
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
-        if: ${{ github.repository != 'cloudscape-design/components' }}
-      - run: npm run test:unit
-        if: ${{ github.repository == 'cloudscape-design/components' }}
-      - name: Upload Artifacts
-        if: ${{ inputs.artifact-path != '' }}
-        uses: cloudscape-design/actions/.github/actions/upload-artifact@main
+          node-version: 20
+      - name: Build Repository
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
-          path: ${{ inputs.artifact-path }}
-          name: ${{ inputs.artifact-name }}
+          repository: ${{ github.repository }}
+          skip-tests: ${{ inputs.skip-tests }}
+          artifact-path: ${{ inputs.artifact-path }}
+          artifact-name: ${{ inputs.artifact-name }}
       - name: Codecov
         if: ${{ inputs.skip-codecov == false && always() }}
         uses: codecov/codecov-action@v4
