@@ -107,7 +107,7 @@ jobs:
       - uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
-          skip_tests: true
+          skip-tests: true
           cache-working-directory: true
 
   buildBoardComponents:
