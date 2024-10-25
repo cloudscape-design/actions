@@ -231,16 +231,32 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - integTestShards
+    if: always()
     steps:
-      - run: echo "Completed all integration tests"
+      - name: Check shard status
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "One or more shards failed"
+            exit 1
+          else
+            echo "All shards completed successfully"
+          fi
 
   a11yTest:
     name: Components accessibility tests
     runs-on: ubuntu-latest
     needs:
       - a11yTestShards
+    if: always()
     steps:
-      - run: echo "Completed all accessibility tests"
+      - name: Check shard status
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "One or more shards failed"
+            exit 1
+          else
+            echo "All shards completed successfully"
+          fi
 
   demosTest:
     name: Demos tests
