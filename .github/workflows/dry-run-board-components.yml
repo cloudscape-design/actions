@@ -1,0 +1,40 @@
+# This workflow executes a custom dry-run for the board-components-package
+name: dry-run
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  # Disable Husky in CI
+  # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
+  HUSKY: 0
+
+jobs:
+  buildBoardComponents:
+    name: Build board components
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cloudscape-design/actions/.github/actions/build-repository@main
+        with:
+          repository: cloudscape-design/board-components
+
+  demosTest:
+    name: Demos tests
+    runs-on: ubuntu-latest
+    needs:
+      - buildBoardComponents
+    steps:
+      - name: Build
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        with:
+          repository: cloudscape-design/demos
