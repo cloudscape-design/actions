@@ -1,0 +1,12 @@
+{
+  "name": "create-build-tree",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node generate-dependencies.js"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^21.0.2",
+    "dotenv": "^16.4.5"
+  }
+}

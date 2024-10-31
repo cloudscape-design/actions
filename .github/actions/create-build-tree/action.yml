@@ -1,0 +1,12 @@
+name: create-build-tree
+description: Build and test the depedendent tree against a given change
+inputs:
+  package:
+    description: 'Package name to build dependency tree for'
+    required: true
+outputs:
+  matrix:
+    description: 'JSON matrix for subsequent build jobs'    
+runs:
+  using: 'node20'
+  main: 'index.js'
