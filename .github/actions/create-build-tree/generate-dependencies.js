@@ -5,7 +5,7 @@ import { Octokit } from '@octokit/rest';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-const OUTPUT_DIR = 'dist';
+const OUTPUT_DIR = 'generated';
 const ORG_NAME = 'cloudscape-design';
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -33,12 +33,11 @@ async function fetchPackageJson(owner, repo) {
   });
   const content = getPackageJsonContent(data);
 
-  if (content) {
-    return JSON.parse(content);
-  } else {
-    console.warn(`Invalid response for ${owner}/${repo}/package.json`);
-    return null;
-  }
+  if (!content) {
+    throw new Error(`Invalid response for ${owner}/${repo}/package.json`);
+  } 
+
+  return JSON.parse(content);
 }
 
 async function main() {
@@ -51,7 +50,8 @@ async function main() {
   const filterByCloudscape = dep => dep.startsWith('@cloudscape-design');
   const transformToRepoName = dep => dep.slice(1);
 
-  for (const repo of allRepositories.filter(repo => !repo.includes('.') && repo !== 'actions')) {
+  const ignoreList = ['.github', 'actions']
+  for (const repo of allRepositories.filter(repo => !ignoreList.includes(repo))) {
     console.log(`Fetching package.json for ${ORG_NAME}/${repo}...`);
     const packageJson = await fetchPackageJson(ORG_NAME, repo);
 

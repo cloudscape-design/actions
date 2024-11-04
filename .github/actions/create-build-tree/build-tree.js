@@ -10,7 +10,7 @@ const artifactToRepositoryMap = {
 };
 
 async function loadDependentMap() {
-  const data = await fs.readFile(path.join(import.meta.dirname, 'dist', 'dependents.json'), { encoding: 'utf-8' });
+  const data = await fs.readFile(path.join(import.meta.dirname, 'generated', 'dependents.json'), { encoding: 'utf-8' });
   const dependentMap = JSON.parse(data);
 
   const adjustedDependentMap = {};
