@@ -85,7 +85,7 @@ jobs:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/browser-test-tools') }}
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
-          repository: cloudscape-design/browser-test-tools
+          repository: cloudscape-design/browser-test-tools@chore/show-scrollbars
 
   buildDocumenter:
     name: Build documenter
