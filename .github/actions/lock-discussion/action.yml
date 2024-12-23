@@ -14,5 +14,7 @@ runs:
         echo "Start installation"
         npm i @octokit/graphql
         echo "Graphql installed"
+    - name: Setup Octokit
+      uses: @octokit/graphql
     - run: TOKEN=${{inputs.token}} REPO=${{inputs.repo}} node ${{ github.action_path }}/index.mjs
       shell: bash

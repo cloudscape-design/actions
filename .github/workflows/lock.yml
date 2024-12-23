@@ -15,7 +15,16 @@ jobs:
   discussion:
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudscape-design/actions/.github/actions/lock-discussion@lock-discussion
+      - name: Setup lock-discussion project
+        run: |
+          cp -r actions/.github/workflows/lock-discussion lock-discussion
+          cd lock-discussion
+          npm i --force
+
+      - name: Run lock discussion
+        run: |
+          cd lock-discussion
+          npm run
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: ${{inputs.repository}}
