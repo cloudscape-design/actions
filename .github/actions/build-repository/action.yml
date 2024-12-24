@@ -4,6 +4,9 @@ inputs:
   repository:
     description: Name of the repository
     required: true
+  ref:
+    description: Name of the branch
+    required: false
   skip-lint:
     required: false
     type: boolean
@@ -36,6 +39,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
     - name: Set-up node
       uses: actions/setup-node@v4
       with:

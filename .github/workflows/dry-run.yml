@@ -323,3 +323,4 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/demos
+          ref: attempt-fixing-chat-tests
