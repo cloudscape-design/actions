@@ -320,7 +320,7 @@ jobs:
     steps:
       - name: Build
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/demos') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@experiment-demos-dry-run
         with:
           repository: cloudscape-design/demos
           ref: attempt-fixing-chat-tests
