@@ -64,7 +64,7 @@ jobs:
         with:
           node-version: 20
       - name: Build Repository
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@env-beta
         with:
           repository: ${{ github.repository }}
           skip-tests: ${{ inputs.skip-tests }}
