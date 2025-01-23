@@ -50,12 +50,12 @@ runs:
         merge-multiple: true
 
     - name: Patch local dependencies
-      uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@main
+      uses: cloudscape-design/actions/.github/actions/patch-local-dependencies${{ github.sha }}
       with:
         path: ${{ github.workspace }}
 
     - name: Unlock dependencies
-      uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
+      uses: cloudscape-design/actions/.github/actions/unlock-dependencies${{ github.sha }}
     - name: Install
       shell: bash
       run: npm install
