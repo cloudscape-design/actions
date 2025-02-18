@@ -6,7 +6,7 @@ on:
       skip-tests:
         required: false
         type: boolean
-        default: false    
+        default: false
       skip-codeql:
         type: boolean
         description: Skip CodeQL checks
@@ -71,7 +71,7 @@ jobs:
           artifact-path: ${{ inputs.artifact-path }}
           artifact-name: ${{ inputs.artifact-name }}
       - name: Codecov
-        if: ${{ inputs.skip-codecov == false && always() }}
+        if: ${{ inputs.skip-codecov == false }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
