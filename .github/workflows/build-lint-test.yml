@@ -6,7 +6,7 @@ on:
       skip-tests:
         required: false
         type: boolean
-        default: false    
+        default: false
       skip-codeql:
         type: boolean
         description: Skip CodeQL checks
@@ -68,6 +68,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
           skip-tests: ${{ inputs.skip-tests }}
+          skip-lint: false
           artifact-path: ${{ inputs.artifact-path }}
           artifact-name: ${{ inputs.artifact-name }}
       - name: Codecov
