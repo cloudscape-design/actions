@@ -68,7 +68,6 @@ jobs:
         with:
           repository: ${{ github.repository }}
           skip-tests: ${{ inputs.skip-tests }}
-          skip-lint: false
           artifact-path: ${{ inputs.artifact-path }}
           artifact-name: ${{ inputs.artifact-name }}
       - name: Codecov
