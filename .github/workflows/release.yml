@@ -60,7 +60,7 @@ jobs:
       - name: Run CodeBuild
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
-          project-name: ${{ inputs.project-name || 'Importer-v2' }}
+          project-name: ${{ inputs.project-name || secrets.AWS_CODEBUILD_PROJECT_NAME ||  'Importer-v2' }}
           disable-source-override: true
           hide-cloudwatch-logs: true
           env-vars-for-codebuild: |
