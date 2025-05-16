@@ -4,14 +4,15 @@ import { createBuildTree } from './build-tree.js';
 import { setOutput } from './core.js';
 
 const repoName = process.env.INPUT_PACKAGE;
+const direction = process.env.TREE_DIRECTION ?? 'dependents';
 
 if (!repoName) {
   throw new Error('Missing input: package');
 }
 
 async function generateBuildMatrix(repoName) {
-  console.log('Creating dependency groups for repo', repoName);
-  const buildTree = await createBuildTree(repoName);
+  console.log('Creating dependency groups for repo', repoName, 'in direction', direction);
+  const buildTree = await createBuildTree(repoName, direction);
   return buildTree;
 }
 
