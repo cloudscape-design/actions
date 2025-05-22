@@ -59,6 +59,9 @@ runs:
     - name: Install
       shell: bash
       run: npm install
+    - name: Revert package(-lock).json changes
+      shell: bash
+      run: git diff --name-only --relative | (grep -E 'package(-lock)?.json' || true)  | xargs --no-run-if-empty git restore
     - name: Build
       shell: bash
       run: npm run build
@@ -81,7 +84,7 @@ runs:
       with:
         path: ${{ github.workspace }}
         key: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
-
+      
     - name: Package lib
       shell: bash
       run: |
