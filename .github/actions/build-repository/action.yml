@@ -24,9 +24,6 @@ inputs:
     type: string
     description: An optional artifact name. Required when artifact-path is specified
     default: ''
-outputs:
-  additional-artifact-id:
-    value: ${{ steps.additional-artifacts.outputs.artifact-id }}
 
 defaults:
   run:
@@ -123,7 +120,6 @@ runs:
         path: lib/*.tgz
 
     - name: Upload additional artifacts
-      id: additional-artifacts
       if: ${{ always() && inputs.artifact-path != '' && inputs.artifact-name != '' }}
       uses: actions/upload-artifact@v4
       with:
