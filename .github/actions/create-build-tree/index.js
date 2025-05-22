@@ -4,7 +4,7 @@ import { createBuildTree } from './build-tree.js';
 import { setOutput } from './core.js';
 
 const repoName = process.env.INPUT_PACKAGE;
-const direction = process.env.TREE_DIRECTION ?? 'dependents';
+const direction = process.env.TREE_DIRECTION || 'dependents';
 
 if (!repoName) {
   throw new Error('Missing input: package');
