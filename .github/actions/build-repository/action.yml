@@ -24,6 +24,9 @@ inputs:
     type: string
     description: An optional artifact name. Required when artifact-path is specified
     default: ''
+outputs:
+  additional-artifact-id:
+    value: ${{ steps.additional-artifacts.outputs.artifact-id }}
 
 defaults:
   run:
@@ -59,6 +62,9 @@ runs:
     - name: Install
       shell: bash
       run: npm install
+    - name: Revert package(-lock).json changes
+      shell: bash
+      run: git diff --name-only --relative | (grep -E 'package(-lock)?.json' || true)  | xargs --no-run-if-empty git restore
     - name: Build
       shell: bash
       run: npm run build
@@ -120,6 +126,7 @@ runs:
         path: lib/*.tgz
 
     - name: Upload additional artifacts
+      id: additional-artifacts
       if: ${{ always() && inputs.artifact-path != '' && inputs.artifact-name != '' }}
       uses: actions/upload-artifact@v4
       with:
