@@ -9,9 +9,8 @@ const artifactToRepositoryMap = {
   'cloudscape-design/test-utils-core': 'cloudscape-design/test-utils',
 };
 
-// direction: 'dependents' | 'dependencies'
-async function loadMap(direction) {
-  const data = await fs.readFile(path.join(import.meta.dirname, 'generated', `${direction}.json`), { encoding: 'utf-8' });
+async function loadDependentMap() {
+  const data = await fs.readFile(path.join(import.meta.dirname, 'generated', 'dependents.json'), { encoding: 'utf-8' });
   const dependentMap = JSON.parse(data);
 
   const adjustedDependentMap = {};
@@ -36,11 +35,11 @@ function collectAllDependents(packageName, dependentMap, collected) {
   return collected;
 }
 
-export async function createBuildTree(packageName, direction) {
-  const dependentMap = await loadMap(direction);
+export async function createBuildTree(packageName) {
+  const dependentMap = await loadDependentMap();
   const adjustedPackageName = artifactToRepositoryMap[packageName] || packageName;
 
-  const repositories = [...collectAllDependents(adjustedPackageName, dependentMap, new Set(direction === 'dependents' ? [adjustedPackageName] : []))];
+  const repositories = [...collectAllDependents(adjustedPackageName, dependentMap, new Set([adjustedPackageName]))];
 
   return { repositories };
 }

@@ -7,9 +7,6 @@ on:
     branches:
       - main
   workflow_call:
-    inputs:
-      tree-direction:
-        type: string
 
 permissions:
   contents: read
@@ -34,8 +31,6 @@ jobs:
         id: set-build-tree-output
         with:
           package: ${{ github.event.repository.full_name }}
-        env:
-          TREE_DIRECTION: ${{ inputs.tree-direction }}
 
   buildBuildTools:
     name: Build build-tools
@@ -47,7 +42,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/build-tools
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildJestPreset:
     name: Build jest-preset
@@ -59,7 +53,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/jest-preset
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildGlobalStyles:
     name: Build global-styles
@@ -71,7 +64,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/global-styles
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildCollectionHooks:
     name: Build collection-hooks
@@ -83,7 +75,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/collection-hooks
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildBrowserTestTools:
     name: Build browser-test-tools
@@ -95,7 +86,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/browser-test-tools
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildDocumenter:
     name: Build documenter
@@ -107,7 +97,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/documenter
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildTestUtils:
     name: Build test-utils
@@ -120,7 +109,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/test-utils
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildThemingCore:
     name: Build theming-core
@@ -134,7 +122,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/theming-core
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildComponentToolkit:
     name: Build component-toolkit
@@ -147,7 +134,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/component-toolkit
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildComponents:
     name: Build components
@@ -188,7 +174,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/board-components
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildCodeView:
     name: Build code view components
@@ -207,7 +192,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/code-view
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   buildChatComponents:
     name: Build chat components
@@ -226,7 +210,6 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/chat-components
-          skip-tests: ${{ inputs.tree-direction == 'dependencies'}}
 
   unitTest:
     name: Components unit tests
@@ -234,7 +217,6 @@ jobs:
     needs:
       - createBuildTree
       - buildComponents
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - name: Restore cached working directory
         uses: actions/cache@v4
@@ -254,7 +236,6 @@ jobs:
     needs:
       - createBuildTree
       - buildComponents
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - name: Restore cached working directory
         uses: actions/cache@v4
@@ -273,7 +254,6 @@ jobs:
     needs:
       - createBuildTree
       - buildComponents
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - name: Restore cached working directory
         uses: actions/cache@v4
@@ -295,7 +275,6 @@ jobs:
     needs:
       - createBuildTree
       - buildComponents
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - name: Restore cached working directory
         uses: actions/cache@v4
@@ -313,7 +292,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - integTestShards
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - run: echo "Completed all integration tests"
 
@@ -322,7 +300,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - a11yTestShards
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - run: echo "Completed all accessibility tests"
 
@@ -340,7 +317,6 @@ jobs:
       - buildTestUtils
       - buildGlobalStyles
       - buildThemingCore
-    if: ${{ inputs.tree-direction != 'dependencies'}}
     steps:
       - name: Build
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/demos') }}
