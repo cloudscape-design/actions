@@ -12,7 +12,7 @@ inputs:
     required: false
     type: boolean
     default: false
-  cache-working-directory:
+  skip-build-artifact:
     required: false
     type: boolean
     default: false
@@ -75,13 +75,6 @@ runs:
       shell: bash
       run: npm run test:unit
 
-    - name: Cache working directory folder
-      if: ${{ inputs.cache-working-directory == 'true' }}
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}
-        key: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
-
     - name: Package lib
       shell: bash
       run: |
@@ -114,6 +107,7 @@ runs:
         echo "SANITIZED_NAME=$SANITIZED_NAME"
 
     - name: Upload build artifacts
+      if: ${{ inputs.skip-build-artifact != 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.sanitize.outputs.sanitized_name }}
