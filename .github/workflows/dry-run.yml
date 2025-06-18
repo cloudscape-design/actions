@@ -27,7 +27,7 @@ jobs:
     outputs:
       repositories: ${{ steps.set-build-tree-output.outputs.repositories }}
     steps:
-      - uses: cloudscape-design/actions/.github/actions/create-build-tree@main
+      - uses: cloudscape-design/actions/.github/actions/create-build-tree@chore-cache-to-artifacts
         id: set-build-tree-output
         with:
           package: ${{ github.event.repository.full_name }}
@@ -39,7 +39,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/build-tools') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/build-tools
 
@@ -50,7 +50,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/jest-preset') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/jest-preset
 
@@ -61,7 +61,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/global-styles') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/global-styles
 
@@ -72,7 +72,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/collection-hooks') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/collection-hooks
 
@@ -83,7 +83,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/browser-test-tools') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/browser-test-tools
 
@@ -94,7 +94,7 @@ jobs:
       - createBuildTree
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/documenter') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/documenter
 
@@ -106,7 +106,7 @@ jobs:
       - buildDocumenter
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/test-utils') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/test-utils
 
@@ -119,7 +119,7 @@ jobs:
       - buildComponentToolkit
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/theming-core') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/theming-core
 
@@ -131,7 +131,7 @@ jobs:
       - buildBrowserTestTools
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/component-toolkit') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/component-toolkit
 
@@ -151,7 +151,7 @@ jobs:
       - buildComponentToolkit
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/components
           skip-tests: true
@@ -171,7 +171,7 @@ jobs:
       - buildComponents
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/board-components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/board-components
 
@@ -189,7 +189,7 @@ jobs:
       - buildComponents
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/code-view') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/code-view
 
@@ -207,7 +207,7 @@ jobs:
       - buildComponents
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/chat-components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/chat-components
 
@@ -314,6 +314,6 @@ jobs:
     steps:
       - name: Build
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/demos') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@chore-cache-to-artifacts
         with:
           repository: cloudscape-design/demos
