@@ -77,10 +77,13 @@ runs:
 
     - name: Cache working directory folder
       if: ${{ inputs.cache-working-directory == 'true' }}
-      uses: actions/cache@v4
+      uses: actions/upload-artifact@v4
       with:
+        name: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
         path: ${{ github.workspace }}
-        key: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
+        if-no-files-found: error
+        include-hidden-files: true
+        overwrite: true
 
     - name: Package lib
       shell: bash
