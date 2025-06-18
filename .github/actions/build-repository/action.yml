@@ -75,11 +75,19 @@ runs:
       shell: bash
       run: npm run test:unit
 
+    - name: Sanitize package name
+      shell: bash
+      id: sanitize
+      run: |
+        SANITIZED_NAME=$(echo "${{ inputs.repository }}" | sed 's/@//g' | sed 's/\//-/g')
+        echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
+        echo "SANITIZED_NAME=$SANITIZED_NAME"
+
     - name: Cache working directory folder
       if: ${{ inputs.cache-working-directory == 'true' }}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.repository }}-${{ github.event.pull_request.head.sha || github.sha }}
+        name: ${{ steps.sanitize.outputs.sanitized_name }}-${{ github.event.pull_request.head.sha || github.sha }}
         path: ${{ github.workspace }}
         if-no-files-found: error
         include-hidden-files: true
@@ -107,14 +115,6 @@ runs:
             fi
           done
         fi
-
-    - name: Sanitize package name
-      shell: bash
-      id: sanitize
-      run: |
-        SANITIZED_NAME=$(echo "${{ inputs.repository }}" | sed 's/@//g' | sed 's/\//-/g')
-        echo "sanitized_name=$SANITIZED_NAME" >> $GITHUB_OUTPUT
-        echo "SANITIZED_NAME=$SANITIZED_NAME"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

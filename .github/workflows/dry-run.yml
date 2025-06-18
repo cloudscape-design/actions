@@ -221,7 +221,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/download-artifact@v4
         with:
-          name: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          name: cloudscape-design-components-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ github.workspace }}
       - name: Run Unit Tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
@@ -240,7 +240,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/download-artifact@v4
         with:
-          name: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          name: cloudscape-design-components-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ github.workspace }}
       - name: Integration tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
@@ -256,7 +256,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/download-artifact@v4
         with:
-          name: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          name: cloudscape-design-components-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ github.workspace }}
       - name: Motion tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
@@ -275,7 +275,7 @@ jobs:
       - name: Restore cached working directory
         uses: actions/download-artifact@v4
         with:
-          name: cloudscape-design/components-${{ github.event.pull_request.head.sha || github.sha }}
+          name: cloudscape-design-components-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ github.workspace }}
       - name: Accessibility tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
