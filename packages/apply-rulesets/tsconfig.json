@@ -1,0 +1,8 @@
+{
+  "extends": ["@tsconfig/node20", "@tsconfig/node-ts"],
+  "compilerOptions": {
+    "outDir": "../../lib/apply-rulesets"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
