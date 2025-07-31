@@ -1,0 +1,31 @@
+name: Apply Github rulesets
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  applyRulesets:
+    name: Apply Github rulesets
+    runs-on: ubuntu-latest
+    env:
+      GH_ORG_TOKEN: ${{ secrets.GH_ORG_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the package
+        run: npm run build
+
+      - name: Apply the rulesets
+        run: node lib/apply-rulesets/index.js

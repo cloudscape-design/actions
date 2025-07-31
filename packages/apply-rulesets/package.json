@@ -1,0 +1,20 @@
+{
+  "name": "@cloudscape-design/apply-rulesets",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node20": "^20.1.6",
+    "@types/node": "^20.19.9",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@octokit/rest": "^22.0.0"
+  }
+}

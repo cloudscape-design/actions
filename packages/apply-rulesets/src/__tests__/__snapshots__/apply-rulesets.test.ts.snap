@@ -1,0 +1,213 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
+[
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+        "repository_name": {
+          "exclude": [],
+          "include": [
+            "actions",
+            "test-utils",
+            "demos",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Basic rulesets",
+      "org": "cloudscape-design",
+      "rules": [
+        {
+          "parameters": {
+            "allowed_merge_methods": [
+              "merge",
+            ],
+            "dismiss_stale_reviews_on_push": true,
+            "require_code_owner_review": false,
+            "require_last_push_approval": true,
+            "required_approving_review_count": 1,
+            "required_review_thread_resolution": false,
+          },
+          "type": "pull_request",
+        },
+        {
+          "parameters": {
+            "required_status_checks": [
+              {
+                "context": "build / build",
+              },
+              {
+                "context": "build / codeql",
+              },
+              {
+                "context": "build / git-secrets",
+              },
+            ],
+            "strict_required_status_checks_policy": true,
+          },
+          "type": "required_status_checks",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+        "repository_name": {
+          "exclude": [],
+          "include": [
+            "test-utils",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Code-cov rulesets",
+      "org": "cloudscape-design",
+      "rules": [
+        {
+          "parameters": {
+            "required_status_checks": [
+              {
+                "context": "codecov/patch",
+              },
+              {
+                "context": "codecov/project",
+              },
+            ],
+            "strict_required_status_checks_policy": true,
+          },
+          "type": "required_status_checks",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+        "repository_name": {
+          "exclude": [],
+          "include": [
+            "test-utils",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Dry-run rulesets",
+      "org": "cloudscape-design",
+      "rules": [
+        {
+          "parameters": {
+            "required_status_checks": [
+              {
+                "context": "dry-run / Build board components",
+              },
+              {
+                "context": "dry-run / Build browser-test-tools",
+              },
+              {
+                "context": "dry-run / Build chat components",
+              },
+              {
+                "context": "dry-run / Build code view components",
+              },
+              {
+                "context": "dry-run / Build collection-hooks",
+              },
+              {
+                "context": "dry-run / Build component-toolkit",
+              },
+              {
+                "context": "dry-run / Build components",
+              },
+              {
+                "context": "dry-run / Build documenter",
+              },
+              {
+                "context": "dry-run / Build global-styles",
+              },
+              {
+                "context": "dry-run / Build jest-preset",
+              },
+              {
+                "context": "dry-run / Build test-utils",
+              },
+              {
+                "context": "dry-run / Build theming-core",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (1)",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (2)",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (3)",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (4)",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (5)",
+              },
+              {
+                "context": "dry-run / Components accessibility tests shards (6)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (1)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (2)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (3)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (4)",
+              },
+              {
+                "context": "dry-run / Components motion tests",
+              },
+              {
+                "context": "dry-run / Components unit tests",
+              },
+              {
+                "context": "dry-run / Create build tree",
+              },
+              {
+                "context": "dry-run / Demos tests",
+              },
+              {
+                "context": "dry-run / Validate PR title",
+              },
+            ],
+            "strict_required_status_checks_policy": true,
+          },
+          "type": "required_status_checks",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+]
+`;
