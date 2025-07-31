@@ -106,9 +106,10 @@ jobs:
       - buildDocumenter
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/test-utils') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@dev-v3-gethinw-test-utils-aom
         with:
           repository: cloudscape-design/test-utils
+          ref: dev-v3-gethinw-aom-selectors
 
   buildThemingCore:
     name: Build theming-core
