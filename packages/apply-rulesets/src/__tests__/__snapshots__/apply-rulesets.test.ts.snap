@@ -71,6 +71,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
           "exclude": [],
           "include": [
             "test-utils",
+            "components",
           ],
         },
       },
@@ -109,6 +110,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
           "exclude": [],
           "include": [
             "test-utils",
+            "components",
           ],
         },
       },

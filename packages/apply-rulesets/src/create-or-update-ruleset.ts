@@ -1,5 +1,5 @@
 import { Octokit, type RestEndpointMethodTypes } from '@octokit/rest';
-import { GH_ORG } from './constants.ts';
+import { GH_ORG } from './constants.js';
 
 export interface RulesetParams {
   name: string;
