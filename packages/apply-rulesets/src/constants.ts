@@ -49,6 +49,7 @@ export const DRY_RUN_CHECKS = [
  */
 export const CODECOV_REPOS = [
   'test-utils',
+  'components',
 
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
@@ -56,7 +57,6 @@ export const CODECOV_REPOS = [
   // 'browser-test-tools',
   // 'code-view',
   // 'component-toolkit',
-  // 'components',
   // 'documenter',
   // 'theming-core',
 ]
@@ -67,6 +67,7 @@ export const CODECOV_REPOS = [
  */
 export const DRY_RUN_REPOS = [
   'test-utils',
+  'components',
 
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
@@ -78,7 +79,6 @@ export const DRY_RUN_REPOS = [
   // 'code-view',
   // 'collection-hooks',
   // 'component-toolkit',
-  // 'components',
   // 'documenter',
   // 'global-styles',
   // 'jest-preset',
