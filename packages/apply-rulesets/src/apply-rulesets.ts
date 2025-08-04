@@ -1,12 +1,12 @@
-import { BASIC_CHECKS, CODECOV_CHECKS, CODECOV_REPOS, DRY_RUN_CHECKS, DRY_RUN_REPOS } from './constants.ts';
-import { createOrUpdateRuleset } from './create-or-update-ruleset.ts';
+import { BASIC_CHECKS, CODECOV_CHECKS, CODECOV_REPOS, DRY_RUN_CHECKS, DRY_RUN_REPOS } from './constants.js';
+import { createOrUpdateRuleset } from './create-or-update-ruleset.js';
 
 export async function applyRulesets() {
   await createOrUpdateRuleset({
     // We'll roll out repositories slowly over time to avoid operational load.
     // As we roll out to a repo, the branch protection rules will be deleted for that repo.
     // The value will be eventually replaced with ['~ALL'] at the end of the roll-out
-    repos: ['actions', 'test-utils', 'demos'],
+    repos: ['actions', 'test-utils', 'demos', 'components'],
 
     name: 'Basic rulesets',
     rules: [
