@@ -29,6 +29,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
           "parameters": {
             "allowed_merge_methods": [
               "merge",
+              "squash",
             ],
             "dismiss_stale_reviews_on_push": true,
             "require_code_owner_review": false,

@@ -17,7 +17,7 @@ export async function applyRulesets() {
           require_last_push_approval: true,
           required_approving_review_count: 1,
           required_review_thread_resolution: false,
-          allowed_merge_methods: ['merge'],
+          allowed_merge_methods: ['merge', 'squash'],
           dismiss_stale_reviews_on_push: true,
         },
       },
