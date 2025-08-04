@@ -17,7 +17,6 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
             "actions",
             "test-utils",
             "demos",
-            "components",
           ],
         },
       },
