@@ -44,15 +44,21 @@ export const DRY_RUN_CHECKS = [
 ];
 
 /**
+ * Repositories covered by basic ruleset
+ * The value will be eventually replaced with ['~ALL'] at the end of the roll-out
+ */
+export const BASIC_REPOS = [
+  'actions', 'test-utils', 'demos'
+]
+
+/**
  * Repositories that `CODECOV_CHECKS` will be applied to.
  * These checks will be applied in addition to the `BASIC_CHECKS`.
  */
 export const CODECOV_REPOS = [
-  'test-utils',
-  'components',
-
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
+  // 'components',
   // 'board-components',
   // 'browser-test-tools',
   // 'code-view',
@@ -67,10 +73,10 @@ export const CODECOV_REPOS = [
  */
 export const DRY_RUN_REPOS = [
   'test-utils',
-  'components',
 
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
+  // 'components',
   // 'board-components',
   // 'browser-test-tools',
   // 'build-tools',
