@@ -5,6 +5,9 @@ const mocks = vi.hoisted(() => ({
   getOrgRulesets: vi.fn().mockResolvedValue({ data: [] }),
   updateOrgRuleset: vi.fn(),
   createOrgRuleset: vi.fn(),
+  getRepoRulesets: vi.fn().mockResolvedValue({ data: [] }),
+  updateRepoRuleset: vi.fn(),
+  createRepoRuleset: vi.fn(),
 }));
 vi.mock('@octokit/rest', () => ({
   Octokit: vi.fn().mockReturnValue({
@@ -13,14 +16,18 @@ vi.mock('@octokit/rest', () => ({
         getOrgRulesets: mocks.getOrgRulesets,
         updateOrgRuleset: mocks.updateOrgRuleset,
         createOrgRuleset: mocks.createOrgRuleset,
+        getRepoRulesets: mocks.getRepoRulesets,
+        updateRepoRuleset: mocks.updateRepoRuleset,
+        createRepoRuleset: mocks.createRepoRuleset,
       },
     },
   }),
 }));
 
 describe(applyRulesets.name, () => {
-  it('applies the basic and dry-run rulesets', async () => {
+  it('applies all of the rulesets', async () => {
     await applyRulesets();
     expect(mocks.createOrgRuleset.mock.calls).toMatchSnapshot();
+    expect(mocks.createRepoRuleset.mock.calls).toMatchSnapshot();
   });
 });
