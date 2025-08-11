@@ -1,4 +1,4 @@
-import { BASIC_CHECKS, BASIC_REPOS, CODECOV_CHECKS, CODECOV_REPOS, DRY_RUN_CHECKS, DRY_RUN_REPOS } from './constants.ts';
+import { BASIC_CHECKS, BASIC_REPOS, CODECOV_CHECKS, CODECOV_REPOS, DRY_RUN_CHECKS, DRY_RUN_REPOS, MERGE_QUEUE_REPOS } from './constants.js';
 import { createOrUpdateRuleset } from './create-or-update-ruleset.js';
 
 export async function applyRulesets() {
@@ -6,6 +6,9 @@ export async function applyRulesets() {
     repos: BASIC_REPOS,
     name: 'Basic rulesets',
     rules: [
+      {
+        type: 'required_linear_history',
+      },
       {
         type: 'pull_request',
         parameters: {
@@ -54,4 +57,23 @@ export async function applyRulesets() {
       },
     ],
   });
-}
+
+  await createOrUpdateRuleset({
+    name: 'Merge-queue ruleset',
+    repos: MERGE_QUEUE_REPOS,
+    rules: [
+      {
+        type: 'merge_queue',
+        parameters: {
+          merge_method: 'SQUASH',
+          max_entries_to_build: 5,
+          min_entries_to_merge: 1,
+          min_entries_to_merge_wait_minutes: 5,
+          max_entries_to_merge: 1,
+          check_response_timeout_minutes: 60,
+          grouping_strategy: 'ALLGREEN'
+        }
+      }
+    ]
+  });
+};
