@@ -1,10 +1,19 @@
-import { BASIC_CHECKS, BASIC_REPOS, CODECOV_CHECKS, CODECOV_REPOS, DRY_RUN_CHECKS, DRY_RUN_REPOS, MERGE_QUEUE_REPOS } from './constants.js';
+import {
+  BASIC_CHECKS,
+  BASIC_REPOS,
+  CODECOV_CHECKS,
+  CODECOV_REPOS,
+  DRY_RUN_CHECKS,
+  DRY_RUN_REPOS,
+  MERGE_QUEUE_REPOS,
+} from './constants.js';
 import { createOrUpdateRuleset } from './create-or-update-ruleset.js';
 
 export async function applyRulesets() {
   await createOrUpdateRuleset({
-    repos: BASIC_REPOS,
     name: 'Basic rulesets',
+    level: 'org',
+    repos: BASIC_REPOS,
     rules: [
       {
         type: 'required_linear_history',
@@ -16,7 +25,7 @@ export async function applyRulesets() {
           require_last_push_approval: true,
           required_approving_review_count: 1,
           required_review_thread_resolution: false,
-          allowed_merge_methods: ['merge'],
+          allowed_merge_methods: ['squash'],
           dismiss_stale_reviews_on_push: true,
         },
       },
@@ -32,6 +41,7 @@ export async function applyRulesets() {
 
   await createOrUpdateRuleset({
     name: 'Code-cov rulesets',
+    level: 'org',
     repos: CODECOV_REPOS,
     rules: [
       {
@@ -46,6 +56,7 @@ export async function applyRulesets() {
 
   await createOrUpdateRuleset({
     name: 'Dry-run rulesets',
+    level: 'org',
     repos: DRY_RUN_REPOS,
     rules: [
       {
@@ -60,6 +71,7 @@ export async function applyRulesets() {
 
   await createOrUpdateRuleset({
     name: 'Merge-queue ruleset',
+    level: 'repo',
     repos: MERGE_QUEUE_REPOS,
     rules: [
       {
@@ -71,9 +83,9 @@ export async function applyRulesets() {
           min_entries_to_merge_wait_minutes: 5,
           max_entries_to_merge: 1,
           check_response_timeout_minutes: 60,
-          grouping_strategy: 'ALLGREEN'
-        }
-      }
-    ]
+          grouping_strategy: 'ALLGREEN',
+        },
+      },
+    ],
   });
-};
+}

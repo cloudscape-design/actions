@@ -5,15 +5,48 @@ export interface RulesetParams {
   name: string;
   repos: string[];
   rules: RestEndpointMethodTypes['repos']['updateOrgRuleset']['parameters']['rules'];
+  level: 'repo' | 'org';
 }
 
-type BaseParams = RestEndpointMethodTypes['repos']['createOrgRuleset']['parameters'];
+type LevelRulesetParams = Omit<RulesetParams, 'level'> & {
+  octokit: Octokit;
+};
 
-export async function createOrUpdateRuleset({ name, repos, rules }: RulesetParams) {
-  const token = process.env.GH_ORG_TOKEN;
-  const octokit = new Octokit({ auth: token });
+async function createOrUpdateRepoRuleset({ name, repos, rules, octokit }: LevelRulesetParams) {
+  const tasks = repos.map(async repo => {
+    const { data: rulesets } = await octokit.rest.repos.getRepoRulesets({ repo, owner: GH_ORG });
+    const ruleset_id = rulesets.find(ruleset => ruleset.name === name)?.id;
+
+    type BaseParams = RestEndpointMethodTypes['repos']['createRepoRuleset']['parameters'];
+    const baseParams: BaseParams = {
+      enforcement: 'active',
+      repo,
+      owner: GH_ORG,
+      name,
+      rules,
+      target: 'branch',
+      conditions: {
+        ref_name: {
+          include: ['~DEFAULT_BRANCH'],
+          exclude: []
+        },
+      },
+    };
+
+    if (ruleset_id) {
+      await octokit.rest.repos.updateRepoRuleset({ ...baseParams, ruleset_id });
+    } else {
+      await octokit.rest.repos.createRepoRuleset(baseParams);
+    }
+  });
+
+  await Promise.all(tasks);
+}
+
+async function createOrUpdateOrgRuleset({ name, repos, rules, octokit }: LevelRulesetParams) {
   const { data: rulesets } = await octokit.rest.repos.getOrgRulesets({ org: GH_ORG });
 
+  type BaseParams = RestEndpointMethodTypes['repos']['createOrgRuleset']['parameters'];
   const baseParams: BaseParams = {
     enforcement: 'active',
     name,
@@ -37,5 +70,18 @@ export async function createOrUpdateRuleset({ name, repos, rules }: RulesetParam
     await octokit.rest.repos.updateOrgRuleset({ ...baseParams, ruleset_id });
   } else {
     await octokit.rest.repos.createOrgRuleset(baseParams);
+  }
+}
+
+export async function createOrUpdateRuleset({ name, repos, rules, level = 'org' }: RulesetParams) {
+  const token = process.env.GH_ORG_TOKEN;
+  const octokit = new Octokit({ auth: token });
+  const params: LevelRulesetParams = { name, repos, rules, octokit };
+
+  switch (level) {
+    case 'org':
+      return await createOrUpdateOrgRuleset(params);
+    case 'repo':
+      return await createOrUpdateRepoRuleset(params);
   }
 }

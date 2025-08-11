@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
+exports[`applyRulesets > applies all of the rulesets 1`] = `
 [
   [
     {
@@ -31,7 +31,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
         {
           "parameters": {
             "allowed_merge_methods": [
-              "merge",
+              "squash",
             ],
             "dismiss_stale_reviews_on_push": true,
             "require_code_owner_review": false,
@@ -214,6 +214,11 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
       "target": "branch",
     },
   ],
+]
+`;
+
+exports[`applyRulesets > applies all of the rulesets 2`] = `
+[
   [
     {
       "conditions": {
@@ -223,16 +228,11 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
             "~DEFAULT_BRANCH",
           ],
         },
-        "repository_name": {
-          "exclude": [],
-          "include": [
-            "components",
-          ],
-        },
       },
       "enforcement": "active",
       "name": "Merge-queue ruleset",
-      "org": "cloudscape-design",
+      "owner": "cloudscape-design",
+      "repo": "components",
       "rules": [
         {
           "parameters": {
