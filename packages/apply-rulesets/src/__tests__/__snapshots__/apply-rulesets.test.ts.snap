@@ -17,6 +17,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
             "actions",
             "test-utils",
             "demos",
+            "components",
           ],
         },
       },
@@ -24,6 +25,9 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
       "name": "Basic rulesets",
       "org": "cloudscape-design",
       "rules": [
+        {
+          "type": "required_linear_history",
+        },
         {
           "parameters": {
             "allowed_merge_methods": [
@@ -69,7 +73,9 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
         },
         "repository_name": {
           "exclude": [],
-          "include": [],
+          "include": [
+            "components",
+          ],
         },
       },
       "enforcement": "active",
@@ -107,6 +113,7 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
           "exclude": [],
           "include": [
             "test-utils",
+            "components",
           ],
         },
       },
@@ -202,6 +209,42 @@ exports[`applyRulesets > applies the basic and dry-run rulesets 1`] = `
             "strict_required_status_checks_policy": true,
           },
           "type": "required_status_checks",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+        "repository_name": {
+          "exclude": [],
+          "include": [
+            "components",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Merge-queue ruleset",
+      "org": "cloudscape-design",
+      "rules": [
+        {
+          "parameters": {
+            "check_response_timeout_minutes": 60,
+            "grouping_strategy": "ALLGREEN",
+            "max_entries_to_build": 5,
+            "max_entries_to_merge": 1,
+            "merge_method": "SQUASH",
+            "min_entries_to_merge": 1,
+            "min_entries_to_merge_wait_minutes": 5,
+          },
+          "type": "merge_queue",
         },
       ],
       "target": "branch",

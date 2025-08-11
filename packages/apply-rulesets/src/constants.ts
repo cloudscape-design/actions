@@ -1,3 +1,5 @@
+import type { CloudscapeRepo } from "./types.js";
+
 export const GH_ORG = 'cloudscape-design';
 
 /*
@@ -47,18 +49,19 @@ export const DRY_RUN_CHECKS = [
  * Repositories covered by basic ruleset
  * The value will be eventually replaced with ['~ALL'] at the end of the roll-out
  */
-export const BASIC_REPOS = [
-  'actions', 'test-utils', 'demos'
+export const BASIC_REPOS: CloudscapeRepo[] = [
+  'actions', 'test-utils', 'demos', 'components',
 ]
 
 /**
  * Repositories that `CODECOV_CHECKS` will be applied to.
  * These checks will be applied in addition to the `BASIC_CHECKS`.
  */
-export const CODECOV_REPOS = [
+export const CODECOV_REPOS: CloudscapeRepo[] = [
+  'components',
+
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
-  // 'components',
   // 'board-components',
   // 'browser-test-tools',
   // 'code-view',
@@ -71,12 +74,12 @@ export const CODECOV_REPOS = [
  * Repositories that `DRY_RUN_CHECKS` will be applied to.
  * These checks will be applied in addition to the `BASIC_CHECKS`.
  */
-export const DRY_RUN_REPOS = [
+export const DRY_RUN_REPOS: CloudscapeRepo[] = [
   'test-utils',
+  'components',
 
   // We'll roll out repositories slowly over time to avoid operational load.
   // As we roll out to a repo, the branch protection rules will be deleted for that repo.
-  // 'components',
   // 'board-components',
   // 'browser-test-tools',
   // 'build-tools',
@@ -90,3 +93,20 @@ export const DRY_RUN_REPOS = [
   // 'jest-preset',
   // 'theming-core',
 ];
+
+export const MERGE_QUEUE_REPOS: CloudscapeRepo[] = [
+  'components',
+
+  // We'll roll out repositories slowly over time to avoid operational load.
+  // As we roll out to a repo, the branch protection rules will be deleted for that repo.
+  // 'board-components',
+  // 'browser-test-tools',
+  // 'chart-components',
+  // 'chat-components',
+  // 'code-view',
+  // 'collection-hooks',
+  // 'documenter',
+  // 'global-styles',
+  // 'jest-preset',
+  // 'theming-core',
+]

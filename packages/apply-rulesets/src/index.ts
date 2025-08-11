@@ -1,4 +1,4 @@
-import { applyRulesets } from './apply-rulesets.ts';
+import { applyRulesets } from './apply-rulesets.js';
 
 try {
   await applyRulesets();
