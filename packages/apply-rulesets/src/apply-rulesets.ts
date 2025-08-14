@@ -1,6 +1,5 @@
 import {
   BASIC_CHECKS,
-  BASIC_REPOS,
   CODECOV_CHECKS,
   CODECOV_REPOS,
   DRY_RUN_CHECKS,
@@ -13,7 +12,7 @@ export async function applyRulesets() {
   await createOrUpdateRuleset({
     name: 'Basic rulesets',
     level: 'org',
-    repos: BASIC_REPOS,
+    repos: ['~ALL'],
     rules: [
       {
         type: 'required_linear_history',
