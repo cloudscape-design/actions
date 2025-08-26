@@ -170,9 +170,10 @@ jobs:
       - buildComponents
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/board-components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@experiment-dry-run
         with:
           repository: cloudscape-design/board-components
+          ref: experiment-dry-run
 
   buildCodeView:
     name: Build code view components
