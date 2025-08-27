@@ -28,6 +28,11 @@ inputs:
     type: string
     description: An optional artifact name. Required when artifact-path is specified
     default: ''
+  env-vars:
+    type: string
+    description: Environment variables to set during build
+    required: false
+    default: ''
 
 defaults:
   run:
@@ -66,7 +71,7 @@ runs:
       run: npm install
     - name: Build
       shell: bash
-      run: npm run build
+      run: ALWAYS_VISUAL_REFRESH=true npm run build
     - name: Lint
       if: ${{ inputs.skip-lint != 'true' }}
       shell: bash
