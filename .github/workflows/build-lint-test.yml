@@ -24,6 +24,11 @@ on:
         type: string
         description: An optional artifact name
         default: artifact
+      react-version:
+        type: string
+        description: React major version target (e.g. "16" or "18")
+        required: false
+        default: "16"
 
 permissions:
   actions: read
@@ -64,12 +69,13 @@ jobs:
         with:
           node-version: 20
       - name: Build Repository
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
         with:
           repository: ${{ github.repository }}
           skip-tests: ${{ inputs.skip-tests }}
           artifact-path: ${{ inputs.artifact-path }}
           artifact-name: ${{ inputs.artifact-name }}
+          react-version: ${{ inputs.react-version }}
       - name: Codecov
         if: ${{ inputs.skip-codecov == false }}
         uses: codecov/codecov-action@v4
