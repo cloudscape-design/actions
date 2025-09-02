@@ -136,7 +136,7 @@ jobs:
           repository: cloudscape-design/component-toolkit
 
   buildComponents:
-    name: Build components
+    name: Build components (React ${{ matrix.react }})
     runs-on: ubuntu-latest
     needs:
       - createBuildTree
@@ -149,13 +149,17 @@ jobs:
       - buildTestUtils
       - buildThemingCore
       - buildComponentToolkit
+    strategy:
+      matrix:
+        react: [16, 18]
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
         with:
           repository: cloudscape-design/components
+          react-version: ${{ matrix.react }}
           skip-tests: true
-
+         
   buildBoardComponents:
     name: Build board components
     runs-on: ubuntu-latest
@@ -238,10 +242,12 @@ jobs:
         run: npm run test:unit
 
   integTestShards:
-    name: Components integration tests shards
+    name: Components integration tests shards (React ${{ matrix.react }}, shard ${{ matrix.shard }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
+        react: [16, 18]
         shard: [1, 2, 3, 4]
     needs:
       # Must match the dependencies for buildComponents
@@ -258,18 +264,22 @@ jobs:
     steps:
       - name: Build components package
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
         with:
           repository: cloudscape-design/components
+          react-version: ${{ matrix.react }}
           skip-tests: true
           skip-build-artifact: true
       - name: Integration tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: npm run test:integ -- --shard=${{ matrix.shard }}/${{ strategy.job-total }} --reactVersion=${{ matrix.react }}
 
   motionTest:
-    name: Components motion tests
+    name: Components motion tests (React ${{ matrix.react }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: [16, 18]
     needs:
       # Must match the dependencies for buildComponents
       - createBuildTree
@@ -285,14 +295,15 @@ jobs:
     steps:
       - name: Build components package
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
         with:
           repository: cloudscape-design/components
+          react-version: ${{ matrix.react }}
           skip-tests: true
           skip-build-artifact: true
       - name: Motion tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        run: npm run test:motion
+        run: npm run test:motion -- --reactVersion=${{ matrix.react }}
 
   a11yTestShards:
     name: Components accessibility tests shards

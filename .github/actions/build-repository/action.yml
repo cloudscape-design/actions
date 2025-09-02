@@ -68,13 +68,10 @@ runs:
       if: ${{ inputs.react-version == '' || inputs.react-version == '16' }}
       shell: bash
       run: npm run build
-    - name: Build with React 18
+    - name: Build (React 18)
       if: ${{ inputs.react-version == '18' }}
       shell: bash
-      run: npm run build
-    - name: Build
-      shell: bash
-      run: npm run build
+      run: npm run build:react18
     - name: Lint
       if: ${{ inputs.skip-lint != 'true' }}
       shell: bash
