@@ -1,4 +1,4 @@
-import type { CloudscapeRepo } from "./types.js";
+import type { CloudscapeRepo } from './types.js';
 
 export const GH_ORG = 'cloudscape-design';
 
@@ -8,7 +8,7 @@ export const GH_ORG = 'cloudscape-design';
 export const BASIC_CHECKS = ['build / build', 'build / codeql', 'build / git-secrets'];
 
 /*
- * Checks that are applied to repositories specified in `CODECOV_REPOS`. 
+ * Checks that are applied to repositories specified in `CODECOV_REPOS`.
  */
 export const CODECOV_CHECKS = ['codecov/patch', 'codecov/project'];
 
@@ -57,7 +57,7 @@ export const CODECOV_REPOS: CloudscapeRepo[] = [
   'components',
   'documenter',
   'theming-core',
-]
+];
 
 /*
  * Repositories that `DRY_RUN_CHECKS` will be applied to.
@@ -83,13 +83,17 @@ export const DRY_RUN_REPOS: CloudscapeRepo[] = [
 export const MERGE_QUEUE_REPOS: CloudscapeRepo[] = [
   'board-components',
   'browser-test-tools',
+  'build-tools',
   'chart-components',
   'chat-components',
   'code-view',
   'collection-hooks',
+  'component-toolkit',
   'components',
+  'demos',
   'documenter',
   'global-styles',
   'jest-preset',
+  'test-utils',
   'theming-core',
-]
+];

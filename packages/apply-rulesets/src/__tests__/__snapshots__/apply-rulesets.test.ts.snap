@@ -309,6 +309,37 @@ exports[`applyRulesets > applies all of the rulesets 2`] = `
       "enforcement": "active",
       "name": "Merge-queue ruleset",
       "owner": "cloudscape-design",
+      "repo": "build-tools",
+      "rules": [
+        {
+          "parameters": {
+            "check_response_timeout_minutes": 60,
+            "grouping_strategy": "ALLGREEN",
+            "max_entries_to_build": 5,
+            "max_entries_to_merge": 1,
+            "merge_method": "SQUASH",
+            "min_entries_to_merge": 1,
+            "min_entries_to_merge_wait_minutes": 5,
+          },
+          "type": "merge_queue",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Merge-queue ruleset",
+      "owner": "cloudscape-design",
       "repo": "chart-components",
       "rules": [
         {
@@ -433,7 +464,69 @@ exports[`applyRulesets > applies all of the rulesets 2`] = `
       "enforcement": "active",
       "name": "Merge-queue ruleset",
       "owner": "cloudscape-design",
+      "repo": "component-toolkit",
+      "rules": [
+        {
+          "parameters": {
+            "check_response_timeout_minutes": 60,
+            "grouping_strategy": "ALLGREEN",
+            "max_entries_to_build": 5,
+            "max_entries_to_merge": 1,
+            "merge_method": "SQUASH",
+            "min_entries_to_merge": 1,
+            "min_entries_to_merge_wait_minutes": 5,
+          },
+          "type": "merge_queue",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Merge-queue ruleset",
+      "owner": "cloudscape-design",
       "repo": "components",
+      "rules": [
+        {
+          "parameters": {
+            "check_response_timeout_minutes": 60,
+            "grouping_strategy": "ALLGREEN",
+            "max_entries_to_build": 5,
+            "max_entries_to_merge": 1,
+            "merge_method": "SQUASH",
+            "min_entries_to_merge": 1,
+            "min_entries_to_merge_wait_minutes": 5,
+          },
+          "type": "merge_queue",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Merge-queue ruleset",
+      "owner": "cloudscape-design",
+      "repo": "demos",
       "rules": [
         {
           "parameters": {
@@ -527,6 +620,37 @@ exports[`applyRulesets > applies all of the rulesets 2`] = `
       "name": "Merge-queue ruleset",
       "owner": "cloudscape-design",
       "repo": "jest-preset",
+      "rules": [
+        {
+          "parameters": {
+            "check_response_timeout_minutes": 60,
+            "grouping_strategy": "ALLGREEN",
+            "max_entries_to_build": 5,
+            "max_entries_to_merge": 1,
+            "merge_method": "SQUASH",
+            "min_entries_to_merge": 1,
+            "min_entries_to_merge_wait_minutes": 5,
+          },
+          "type": "merge_queue",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Merge-queue ruleset",
+      "owner": "cloudscape-design",
+      "repo": "test-utils",
       "rules": [
         {
           "parameters": {
