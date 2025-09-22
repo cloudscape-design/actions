@@ -24,6 +24,11 @@ inputs:
     type: string
     description: An optional artifact name. Required when artifact-path is specified
     default: ''
+  react-version:
+    type: string
+    description: React major version target (e.g. "16" or "18")
+    required: false
+    default: "16"
 
 defaults:
   run:
@@ -60,8 +65,13 @@ runs:
       shell: bash
       run: npm install
     - name: Build
+      if: ${{ inputs.react-version == '' || inputs.react-version == '16' }}
       shell: bash
       run: npm run build
+    - name: Build (React 18)
+      if: ${{ inputs.react-version == '18' }}
+      shell: bash
+      run: npm run build:react18
     - name: Lint
       if: ${{ inputs.skip-lint != 'true' }}
       shell: bash
@@ -107,7 +117,7 @@ runs:
         echo "SANITIZED_NAME=$SANITIZED_NAME"
 
     - name: Upload build artifacts
-      if: ${{ inputs.skip-build-artifact != 'true' }}
+      if: ${{ inputs.skip-build-artifact != 'true' && (inputs.react-version == '' || inputs.react-version == '16') }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.sanitize.outputs.sanitized_name }}

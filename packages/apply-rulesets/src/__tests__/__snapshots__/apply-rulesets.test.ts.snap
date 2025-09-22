@@ -194,19 +194,34 @@ exports[`applyRulesets > applies all of the rulesets 1`] = `
                 "context": "dry-run / Components accessibility tests shards (6)",
               },
               {
-                "context": "dry-run / Components integration tests shards (1)",
+                "context": "dry-run / Components integration tests shards (React 16, 1)",
               },
               {
-                "context": "dry-run / Components integration tests shards (2)",
+                "context": "dry-run / Components integration tests shards (React 16, 2)",
               },
               {
-                "context": "dry-run / Components integration tests shards (3)",
+                "context": "dry-run / Components integration tests shards (React 16, 3)",
               },
               {
-                "context": "dry-run / Components integration tests shards (4)",
+                "context": "dry-run / Components integration tests shards (React 16, 4)",
               },
               {
-                "context": "dry-run / Components motion tests",
+                "context": "dry-run / Components integration tests shards (React 18, 1)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (React 18, 2)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (React 18, 3)",
+              },
+              {
+                "context": "dry-run / Components integration tests shards (React 18, 4)",
+              },
+              {
+                "context": "dry-run / Components motion tests (React 16)",
+              },
+              {
+                "context": "dry-run / Components motion tests (React 18)",
               },
               {
                 "context": "dry-run / Components unit tests",
