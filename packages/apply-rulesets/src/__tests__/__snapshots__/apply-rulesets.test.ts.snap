@@ -194,28 +194,28 @@ exports[`applyRulesets > applies all of the rulesets 1`] = `
                 "context": "dry-run / Components accessibility tests shards (6)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 16, 1)",
+                "context": "dry-run / Components integration tests shards (React 16, shard 1)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 16, 2)",
+                "context": "dry-run / Components integration tests shards (React 16, shard 2)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 16, 3)",
+                "context": "dry-run / Components integration tests shards (React 16, shard 3)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 16, 4)",
+                "context": "dry-run / Components integration tests shards (React 16, shard 4)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 18, 1)",
+                "context": "dry-run / Components integration tests shards (React 18, shard 1)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 18, 2)",
+                "context": "dry-run / Components integration tests shards (React 18, shard 2)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 18, 3)",
+                "context": "dry-run / Components integration tests shards (React 18, shard 3)",
               },
               {
-                "context": "dry-run / Components integration tests shards (React 18, 4)",
+                "context": "dry-run / Components integration tests shards (React 18, shard 4)",
               },
               {
                 "context": "dry-run / Components motion tests (React 16)",
