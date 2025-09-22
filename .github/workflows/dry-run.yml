@@ -136,7 +136,7 @@ jobs:
           repository: cloudscape-design/component-toolkit
 
   buildComponents:
-    name: Build components (React ${{ matrix.react }})
+    name: Build components${{ matrix.react != 16 && format(' (React {0})', matrix.react) || '' }}
     runs-on: ubuntu-latest
     needs:
       - createBuildTree
