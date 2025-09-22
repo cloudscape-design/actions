@@ -154,7 +154,7 @@ jobs:
         react: [16, 18]
     steps:
       - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
           react-version: ${{ matrix.react }}
@@ -264,7 +264,7 @@ jobs:
     steps:
       - name: Build components package
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
           react-version: ${{ matrix.react }}
@@ -295,7 +295,7 @@ jobs:
     steps:
       - name: Build components package
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
-        uses: cloudscape-design/actions/.github/actions/build-repository@react-var
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
           react-version: ${{ matrix.react }}
