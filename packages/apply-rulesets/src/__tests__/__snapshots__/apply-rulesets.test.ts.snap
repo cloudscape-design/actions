@@ -149,6 +149,9 @@ exports[`applyRulesets > applies all of the rulesets 1`] = `
                 "context": "dry-run / Build chat components",
               },
               {
+                "context": "dry-run / Build chart components",
+              },
+              {
                 "context": "dry-run / Build code view components",
               },
               {

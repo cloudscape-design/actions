@@ -213,6 +213,24 @@ jobs:
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/chat-components
+  
+  buildChartComponents:
+    name: Build chart components
+    runs-on: ubuntu-latest
+    needs:
+      - createBuildTree
+      - buildBuildTools
+      - buildGlobalStyles
+      - buildBrowserTestTools
+      - buildDocumenter
+      - buildTestUtils
+      - buildComponentToolkit
+      - buildComponents
+    steps:
+      - if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/chart-components') }}
+        uses: cloudscape-design/actions/.github/actions/build-repository@main
+        with:
+          repository: cloudscape-design/chart-components
 
   unitTest:
     name: Components unit tests
@@ -360,6 +378,7 @@ jobs:
       - buildBoardComponents
       - buildCodeView
       - buildChatComponents
+      - buildChartComponents
       - buildBrowserTestTools
       - buildCollectionHooks
       - buildTestUtils
