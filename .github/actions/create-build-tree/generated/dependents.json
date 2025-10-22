@@ -4,7 +4,8 @@
     "cloudscape-design/components",
     "cloudscape-design/board-components",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/browser-test-tools": [
     "cloudscape-design/theming-core",
@@ -13,7 +14,8 @@
     "cloudscape-design/component-toolkit",
     "cloudscape-design/demos",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/component-toolkit": [
     "cloudscape-design/theming-core",
@@ -21,7 +23,8 @@
     "cloudscape-design/board-components",
     "cloudscape-design/demos",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/collection-hooks": [
     "cloudscape-design/components",
@@ -31,7 +34,8 @@
     "cloudscape-design/components",
     "cloudscape-design/board-components",
     "cloudscape-design/demos",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/theming-runtime": [
     "cloudscape-design/components",
@@ -41,7 +45,8 @@
     "cloudscape-design/components",
     "cloudscape-design/board-components",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/eslint-plugin": [
     "cloudscape-design/components"
@@ -51,7 +56,8 @@
     "cloudscape-design/board-components",
     "cloudscape-design/demos",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/jest-preset": [
     "cloudscape-design/components",
@@ -61,25 +67,29 @@
     "cloudscape-design/components",
     "cloudscape-design/board-components",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/theming-build": [
     "cloudscape-design/components",
     "cloudscape-design/board-components",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/components": [
     "cloudscape-design/board-components",
     "cloudscape-design/demos",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/design-tokens": [
     "cloudscape-design/board-components",
     "cloudscape-design/demos",
     "cloudscape-design/code-view",
-    "cloudscape-design/chat-components"
+    "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components"
   ],
   "cloudscape-design/board-components": [
     "cloudscape-design/demos"
@@ -88,6 +98,9 @@
     "cloudscape-design/demos"
   ],
   "cloudscape-design/chat-components": [
+    "cloudscape-design/demos"
+  ],
+  "cloudscape-design/chart-components": [
     "cloudscape-design/demos"
   ]
 }

@@ -19,6 +19,7 @@ export const DRY_RUN_CHECKS = [
   'dry-run / Build board components',
   'dry-run / Build browser-test-tools',
   'dry-run / Build chat components',
+  'dry-run / Build chart components',
   'dry-run / Build code view components',
   'dry-run / Build collection-hooks',
   'dry-run / Build component-toolkit',
