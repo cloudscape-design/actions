@@ -46,6 +46,7 @@
     "cloudscape-design/browser-test-tools",
     "cloudscape-design/code-view",
     "cloudscape-design/chat-components",
+    "cloudscape-design/chart-components",
     "cloudscape-design/collection-hooks",
     "cloudscape-design/component-toolkit",
     "cloudscape-design/components",
@@ -66,6 +67,18 @@
     "cloudscape-design/theming-build"
   ],
   "cloudscape-design/chat-components": [
+    "cloudscape-design/component-toolkit",
+    "cloudscape-design/test-utils-core",
+    "cloudscape-design/browser-test-tools",
+    "cloudscape-design/build-tools",
+    "cloudscape-design/components",
+    "cloudscape-design/design-tokens",
+    "cloudscape-design/documenter",
+    "cloudscape-design/global-styles",
+    "cloudscape-design/test-utils-converter",
+    "cloudscape-design/theming-build"
+  ],
+  "cloudscape-design/chart-components": [
     "cloudscape-design/component-toolkit",
     "cloudscape-design/test-utils-core",
     "cloudscape-design/browser-test-tools",
