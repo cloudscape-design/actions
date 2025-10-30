@@ -61,6 +61,9 @@ runs:
 
     - name: Unlock dependencies
       uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
+    - name: Clear npm cache
+      shell: bash
+      run: npm cache clean --force
     - name: Install
       shell: bash
       run: npm install
