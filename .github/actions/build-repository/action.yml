@@ -70,7 +70,7 @@ runs:
     - name: Build
       if: ${{ inputs.react-version == '' || inputs.react-version == '16' }}
       shell: bash
-      # We pass ALWAYS_VISUAL_REFRESH only for the dry-run jobs when the tests are skipped so that
+      # We pass ALWAYS_VISUAL_REFRESH only for the dry-run jobs where the tests are skipped so that
       # the components tests are unaffected (some still run on Classic), but the downstream packages
       # only consume the visual refresh theme.
       env:
