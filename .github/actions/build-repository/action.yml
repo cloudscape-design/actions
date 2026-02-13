@@ -71,13 +71,13 @@ runs:
       if: ${{ inputs.react-version == '' || inputs.react-version == '16' }}
       shell: bash
       env:
-        ALWAYS_VISUAL_REFRESH: true
+        ALWAYS_VISUAL_REFRESH: ${{ inputs.skip-tests == 'true' }}
       run: npm run build
     - name: Build (React 18)
       if: ${{ inputs.react-version == '18' }}
       shell: bash
       env:
-        ALWAYS_VISUAL_REFRESH: true
+        ALWAYS_VISUAL_REFRESH: ${{ inputs.skip-tests == 'true' }}
       run: npm run build:react18
     - name: Lint
       if: ${{ inputs.skip-lint != 'true' }}
