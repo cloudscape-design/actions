@@ -29,6 +29,11 @@ inputs:
     description: React major version target (e.g. "16" or "18")
     required: false
     default: "16"
+  force-visual-refresh:
+    type: boolean
+    description: Whether to force ALWAYS_VISUAL_REFRESH to true
+    required: false
+    default: false
 
 defaults:
   run:
@@ -70,17 +75,14 @@ runs:
     - name: Build
       if: ${{ inputs.react-version == '' || inputs.react-version == '16' }}
       shell: bash
-      # We pass ALWAYS_VISUAL_REFRESH only for the dry-run jobs where the tests are skipped so that
-      # the components tests are unaffected (some still run on Classic), but the downstream packages
-      # only consume the visual refresh theme.
       env:
-        ALWAYS_VISUAL_REFRESH: ${{ inputs.skip-tests == 'true' }}
+        ALWAYS_VISUAL_REFRESH: ${{ inputs.force-visual-refresh == 'true' }}
       run: npm run build
     - name: Build (React 18)
       if: ${{ inputs.react-version == '18' }}
       shell: bash
       env:
-        ALWAYS_VISUAL_REFRESH: ${{ inputs.skip-tests == 'true' }}
+        ALWAYS_VISUAL_REFRESH: ${{ inputs.force-visual-refresh == 'true' }}
       run: npm run build:react18
     - name: Lint
       if: ${{ inputs.skip-lint != 'true' }}
