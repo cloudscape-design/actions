@@ -7,6 +7,11 @@ on:
     branches:
       - main
   workflow_call:
+    inputs:
+      force-visual-refresh:
+        description: 'Whether to force ALWAYS_VISUAL_REFRESH to true for all builds'
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -159,6 +164,7 @@ jobs:
           repository: cloudscape-design/components
           react-version: ${{ matrix.react }}
           skip-tests: true
+          force-visual-refresh: ${{ inputs.force-visual-refresh }}
          
   buildBoardComponents:
     name: Build board components
@@ -255,6 +261,7 @@ jobs:
           repository: cloudscape-design/components
           skip-tests: true
           skip-build-artifact: true
+          force-visual-refresh: ${{ inputs.force-visual-refresh }}
       - name: Run Unit Tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
         run: npm run test:unit
@@ -288,6 +295,7 @@ jobs:
           react-version: ${{ matrix.react }}
           skip-tests: true
           skip-build-artifact: true
+          force-visual-refresh: ${{ inputs.force-visual-refresh }}
       - name: Integration tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
         run: npm run test:integ -- --shard=${{ matrix.shard }} --reactVersion=${{ matrix.react }}
@@ -319,6 +327,7 @@ jobs:
           react-version: ${{ matrix.react }}
           skip-tests: true
           skip-build-artifact: true
+          force-visual-refresh: ${{ inputs.force-visual-refresh }}
       - name: Motion tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
         run: npm run test:motion -- --reactVersion=${{ matrix.react }}
@@ -349,6 +358,7 @@ jobs:
           repository: cloudscape-design/components
           skip-tests: true
           skip-build-artifact: true
+          force-visual-refresh: ${{ inputs.force-visual-refresh }}
       - name: Accessibility tests
         if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
         run: npm run test:a11y -- --shard=${{ matrix.shard }}
