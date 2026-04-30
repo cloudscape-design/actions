@@ -24,11 +24,7 @@ jobs:
 
       - name: Clean up internal dependencies from lockfile
         run: |
-          if ! command -v prepare-package-lock &> /dev/null; then
-            echo "prepare-package-lock not found, skipping"
-            exit 0
-          fi
-          prepare-package-lock
+          npx --no-install prepare-package-lock
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet || (git add package-lock.json && git commit -m "chore: remove @cloudscape-design deps from lockfile" && git push)
