@@ -27,4 +27,4 @@ jobs:
           npx --no-install prepare-package-lock
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git diff --quiet || (git add package-lock.json && git commit -m "chore: remove @cloudscape-design deps from lockfile" && git push)
+          git diff --quiet || (git add package-lock.json && git commit --no-verify -m "chore: remove @cloudscape-design deps from lockfile" && git push)
