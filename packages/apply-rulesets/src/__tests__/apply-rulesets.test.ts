@@ -10,8 +10,8 @@ const mocks = vi.hoisted(() => ({
   createRepoRuleset: vi.fn(),
 }));
 vi.mock('@octokit/rest', () => ({
-  Octokit: vi.fn().mockReturnValue({
-    rest: {
+  Octokit: vi.fn<new (options?: any) => any>().mockImplementation(class {
+    rest = {
       repos: {
         getOrgRulesets: mocks.getOrgRulesets,
         updateOrgRuleset: mocks.updateOrgRuleset,
@@ -20,7 +20,7 @@ vi.mock('@octokit/rest', () => ({
         updateRepoRuleset: mocks.updateRepoRuleset,
         createRepoRuleset: mocks.createRepoRuleset,
       },
-    },
+    };
   }),
 }));
 
