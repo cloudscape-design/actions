@@ -1,31 +1,29 @@
-name: Deploy
+name: Deploy fork preview
 
 on:
   workflow_call:
     inputs:
       artifact-name:
+        description: Artifact to download/deploy; also the target path and the `fork-` environment suffix
         type: string
-        description: Name of artifact to deploy
         required: true
-      deployment-path:
-        type: string
-        description: Directory of assets to upload
-        default: '.'
 
 permissions:
   id-token: write
   contents: read
   deployments: write
+  actions: read
 
 jobs:
   deploy:
     if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name != github.event.workflow_run.repository.full_name }}
     runs-on: ubuntu-latest
     continue-on-error: true
     environment:
-      name: ${{ inputs.artifact-name }}
+      name: fork-${{ inputs.artifact-name }}
       url: ${{ steps.deploy.outputs.preview-url }}index.html
     steps:
       - name: Download artifact
@@ -33,6 +31,8 @@ jobs:
         with:
           name: ${{ inputs.artifact-name }}
           path: build
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
       - name: Deploy dev-pages
         id: deploy
         uses: cloudscape-design/actions/.github/actions/deploy-static@main
@@ -41,3 +41,4 @@ jobs:
           deployment-bucket: ${{ secrets.AWS_PREVIEW_BUCKET_NAME }}
           source-path: build
           target-path: ${{ inputs.artifact-name }}
+          commit-sha: ${{ github.event.workflow_run.head_sha }}

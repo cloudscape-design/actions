@@ -14,6 +14,10 @@ inputs:
   target-path:
     description: Path prefix on the deployment URL
     required: true
+  commit-sha:
+    description: Commit SHA used in the deployment path
+    required: false
+    default: ${{ github.event.pull_request.head.sha }}
 
 outputs:
   preview-url:
@@ -32,7 +36,7 @@ runs:
       id: deployment-path
       shell: bash
       run: |
-        echo "deployment-path=${{ github.event.repository.name }}/${{ github.event.pull_request.head.sha }}/${{ inputs.target-path }}/" >> $GITHUB_OUTPUT
+        echo "deployment-path=${{ github.event.repository.name }}/${{ inputs.commit-sha }}/${{ inputs.target-path }}/" >> $GITHUB_OUTPUT
     - name: Deploy content
       id: deploy
       shell: bash
