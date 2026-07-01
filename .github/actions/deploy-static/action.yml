@@ -41,4 +41,4 @@ runs:
       id: deploy
       shell: bash
       run: |
-        aws s3 cp ${{ inputs.source-path }} s3://${{ inputs.deployment-bucket }}/${{ steps.deployment-path.outputs.deployment-path }} --recursive
+        aws s3 cp ${{ inputs.source-path }} s3://${{ inputs.deployment-bucket }}/${{ steps.deployment-path.outputs.deployment-path }} --recursive --no-follow-symlinks
