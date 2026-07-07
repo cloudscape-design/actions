@@ -24,6 +24,11 @@ env:
   # Disable Husky in CI
   # https://typicode.github.io/husky/how-to.html#ci-server-and-docker
   HUSKY: 0
+  # Identify the package under test and the PR commit, so consumers that
+  # reference it via a `github:<repo>#<ref>` git URL (which produces no tarball)
+  # are repinned to the PR commit instead of resolving against live main.
+  DRY_RUN_CHANGED_REPO: ${{ github.repository }}
+  DRY_RUN_CHANGED_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
 
 jobs:
   createBuildTree:

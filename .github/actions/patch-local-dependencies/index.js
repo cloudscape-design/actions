@@ -24,6 +24,20 @@ if (!fs.existsSync(packageJsonFullPath)) {
 const packageJsonData = JSON.parse(fs.readFileSync(packageJsonFullPath, 'utf8'));
 const tarballFiles = fs.readdirSync(tarballDirFullPath).filter(file => file.endsWith('.tgz'));
 
+// The package under test in a dry-run, and the commit to pin it to. When a
+// consumer references the changed package via a `github:<repo>#<ref>` git URL
+// (e.g. build-tools, which publishes no tarball), swap the ref to the PR commit
+// so the consumer resolves against the PR's manifest instead of live main.
+const changedRepo = process.env.DRY_RUN_CHANGED_REPO || '';
+const changedRef = process.env.DRY_RUN_CHANGED_SHA || '';
+
+const repinGitRefToChangedCommit = value => {
+  if (!changedRepo || !changedRef) return null;
+  const match = /^github:([^#]+)(?:#.*)?$/.exec(value);
+  if (!match || match[1] !== changedRepo) return null;
+  return `github:${changedRepo}#${changedRef}`;
+};
+
 const updateCloudscapeDependencies = dependencies => {
   if (!dependencies) return {};
   return Object.keys(dependencies).reduce((updatedDeps, key) => {
@@ -33,8 +47,14 @@ const updateCloudscapeDependencies = dependencies => {
         console.log(`Updating ${key} to tarball file: ${tarball}`);
         updatedDeps[key] = `file:${path.join(tarballDirFullPath, tarball)}`;
       } else {
-        console.log(`No tarball found for ${key}, skipping update.`);
-        updatedDeps[key] = dependencies[key];
+        const repinned = repinGitRefToChangedCommit(dependencies[key]);
+        if (repinned) {
+          console.log(`Pinning ${key} git ref to changed commit: ${repinned}`);
+          updatedDeps[key] = repinned;
+        } else {
+          console.log(`No tarball found for ${key}, skipping update.`);
+          updatedDeps[key] = dependencies[key];
+        }
       }
     } else {
       updatedDeps[key] = dependencies[key];
