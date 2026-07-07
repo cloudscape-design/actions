@@ -60,7 +60,7 @@ runs:
         merge-multiple: true
 
     - name: Patch local dependencies
-      uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@main
+      uses: cloudscape-design/actions/.github/actions/patch-local-dependencies@dev-gethinw-dryrun-git-ref-pin-selftest
       with:
         path: ${{ github.workspace }}
 
