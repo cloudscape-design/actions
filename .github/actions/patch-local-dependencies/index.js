@@ -12,17 +12,17 @@ const tarballDir = core.getInput('tarball-dir');
 const packageJsonFullPath = path.resolve(path.join(rootPath, 'package.json'));
 const tarballDirFullPath = path.resolve(tarballDir);
 
-if (!fs.existsSync(tarballDirFullPath)) {
-  console.log('No local tarball directory found. No local dependencies will be loaded.');
-  return;
-}
-
 if (!fs.existsSync(packageJsonFullPath)) {
   throw new Error(`package.json not found at path: ${packageJsonFullPath}`);
 }
 
+const tarballDirExists = fs.existsSync(tarballDirFullPath);
+if (!tarballDirExists) {
+  console.log('No local tarball directory found; only git-ref repinning of the changed package will apply.');
+}
+
 const packageJsonData = JSON.parse(fs.readFileSync(packageJsonFullPath, 'utf8'));
-const tarballFiles = fs.readdirSync(tarballDirFullPath).filter(file => file.endsWith('.tgz'));
+const tarballFiles = tarballDirExists ? fs.readdirSync(tarballDirFullPath).filter(file => file.endsWith('.tgz')) : [];
 
 // The package under test in a dry-run, and the commit to pin it to. When a
 // consumer references the changed package via a `github:<repo>#<ref>` git URL
