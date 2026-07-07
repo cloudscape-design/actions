@@ -8,25 +8,24 @@ const core = require('./core');
 
 const rootPath = core.getInput('path');
 const tarballDir = core.getInput('tarball-dir');
+const buildToolsRef = core.getInput('build-tools-ref');
 
 const packageJsonFullPath = path.resolve(path.join(rootPath, 'package.json'));
 const tarballDirFullPath = path.resolve(tarballDir);
-
-if (!fs.existsSync(tarballDirFullPath)) {
-  console.log('No local tarball directory found. No local dependencies will be loaded.');
-  return;
-}
 
 if (!fs.existsSync(packageJsonFullPath)) {
   throw new Error(`package.json not found at path: ${packageJsonFullPath}`);
 }
 
 const packageJsonData = JSON.parse(fs.readFileSync(packageJsonFullPath, 'utf8'));
-const tarballFiles = fs.readdirSync(tarballDirFullPath).filter(file => file.endsWith('.tgz'));
+const tarballFiles = fs.existsSync(tarballDirFullPath)
+  ? fs.readdirSync(tarballDirFullPath).filter(file => file.endsWith('.tgz'))
+  : [];
 
 const updateCloudscapeDependencies = dependencies => {
   if (!dependencies) return {};
-  return Object.keys(dependencies).reduce((updatedDeps, key) => {
+
+  dependencies = Object.keys(dependencies).reduce((updatedDeps, key) => {
     if (key.startsWith('@cloudscape-design/')) {
       const tarball = tarballFiles.find(file => file.replace('cloudscape-design-', '').startsWith(key.replace('@cloudscape-design/', '')));
       if (tarball) {
@@ -41,6 +40,17 @@ const updateCloudscapeDependencies = dependencies => {
     }
     return updatedDeps;
   }, {});
+
+  // build-tools is consumed via a `github:` reference (it ships no build artifact / tarball),
+  // so it can't be swapped in through the tarball mechanism above. When the dry-run originates
+  // from a build-tools PR, re-point that reference at the branch/SHA under test so downstream
+  // packages install the PR version instead of `#main`.
+  if (buildToolsRef && dependencies['@cloudscape-design/build-tools']) {
+    console.log(`Updating @cloudscape-design/build-tools to dry-run ref: ${buildToolsRef}`);
+    dependencies['@cloudscape-design/build-tools'] = `github:cloudscape-design/build-tools#${buildToolsRef}`;
+  }
+
+  return dependencies;
 };
 
 packageJsonData.dependencies = updateCloudscapeDependencies(packageJsonData.dependencies);
