@@ -8,6 +8,12 @@ inputs:
     description: Path to the directory containing the local tarballs
     required: true
     default: './.build-cache'
+  build-tools-ref:
+    description: >-
+      Git ref (branch or SHA) to install @cloudscape-design/build-tools from during a dry-run.
+      Set only when the dry-run source repository is build-tools; leave empty otherwise.
+    required: false
+    default: ''
 runs:
   using: 'node20'
   main: 'index.js'
