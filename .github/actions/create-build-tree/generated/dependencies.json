@@ -2,11 +2,16 @@
   "cloudscape-design/global-styles": [],
   "cloudscape-design/documenter": [],
   "cloudscape-design/jest-preset": [],
-  "cloudscape-design/collection-hooks": [],
+  "cloudscape-design/collection-hooks": [
+    "cloudscape-design/component-toolkit",
+    "cloudscape-design/build-tools"
+  ],
   "cloudscape-design/test-utils": [
-    "cloudscape-design/documenter"
+    "cloudscape-design/documenter",
+    "cloudscape-design/build-tools"
   ],
   "cloudscape-design/theming-core": [
+    "cloudscape-design/build-tools",
     "cloudscape-design/browser-test-tools",
     "cloudscape-design/component-toolkit"
   ],
@@ -19,7 +24,6 @@
     "cloudscape-design/browser-test-tools",
     "cloudscape-design/build-tools",
     "cloudscape-design/documenter",
-    "cloudscape-design/eslint-plugin",
     "cloudscape-design/global-styles",
     "cloudscape-design/jest-preset",
     "cloudscape-design/test-utils-converter",
@@ -39,14 +43,16 @@
   ],
   "cloudscape-design/component-toolkit": [
     "cloudscape-design/browser-test-tools",
+    "cloudscape-design/build-tools",
     "cloudscape-design/jest-preset"
   ],
   "cloudscape-design/demos": [
+    "cloudscape-design/build-tools",
     "cloudscape-design/board-components",
     "cloudscape-design/browser-test-tools",
-    "cloudscape-design/code-view",
-    "cloudscape-design/chat-components",
     "cloudscape-design/chart-components",
+    "cloudscape-design/chat-components",
+    "cloudscape-design/code-view",
     "cloudscape-design/collection-hooks",
     "cloudscape-design/component-toolkit",
     "cloudscape-design/components",
@@ -71,6 +77,7 @@
     "cloudscape-design/test-utils-core",
     "cloudscape-design/browser-test-tools",
     "cloudscape-design/build-tools",
+    "cloudscape-design/code-view",
     "cloudscape-design/components",
     "cloudscape-design/design-tokens",
     "cloudscape-design/documenter",
@@ -78,17 +85,18 @@
     "cloudscape-design/test-utils-converter",
     "cloudscape-design/theming-build"
   ],
+  "cloudscape-design/build-tools": [],
   "cloudscape-design/chart-components": [
     "cloudscape-design/component-toolkit",
-    "cloudscape-design/test-utils-core",
     "cloudscape-design/browser-test-tools",
     "cloudscape-design/build-tools",
+    "cloudscape-design/code-view",
     "cloudscape-design/components",
     "cloudscape-design/design-tokens",
     "cloudscape-design/documenter",
     "cloudscape-design/global-styles",
     "cloudscape-design/test-utils-converter",
+    "cloudscape-design/test-utils-core",
     "cloudscape-design/theming-build"
-  ],
-  "cloudscape-design/build-tools": []
+  ]
 }
