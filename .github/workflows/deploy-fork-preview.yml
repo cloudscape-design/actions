@@ -39,6 +39,7 @@ jobs:
           source-path: build
           target-path: ${{ inputs.artifact-name }}
           commit-sha: ${{ github.event.workflow_run.head_sha }}
+      # workflow_run uses the default branch ref, so explicitly attach the deployment to the fork PR commit
       - name: Attach deployment to pull request
         uses: actions/github-script@v7
         env:
