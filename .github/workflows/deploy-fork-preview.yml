@@ -1,6 +1,12 @@
 name: Deploy fork preview
 
 on:
+  # Fork preview flow:
+  # 1. After reviewing the fork changes, a maintainer approves the pull_request workflow run.
+  # 2. The consumer's pull_request workflow calls the shared build-lint-test.yml workflow.
+  #    It runs without secrets and uploads the preview artifact.
+  # 3. After the build succeeds, a workflow_run wrapper in the consuming repository calls this workflow.
+  # 4. This privileged workflow downloads and deploys the artifact without checking out or running fork code.
   workflow_call:
     inputs:
       artifact-name:
@@ -22,12 +28,16 @@ jobs:
       github.event.workflow_run.head_repository.full_name != github.event.workflow_run.repository.full_name }}
     runs-on: ubuntu-latest
     continue-on-error: true
+    # workflow_run loads this workflow from the default branch, so the fork cannot alter privileged steps.
+    # This job must never check out or execute fork code; it only deploys the artifact built without secrets.
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
           path: build
+          # The artifact belongs to the triggering build run, so fetch it using the run ID from
+          # the caller's workflow_run payload. Cross-run downloads require the token and actions: read.
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
       - name: Deploy dev-pages

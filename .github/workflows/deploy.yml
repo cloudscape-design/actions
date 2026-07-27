@@ -18,6 +18,7 @@ permissions:
   deployments: write
 
 jobs:
+  # This path is for internal PRs only. Fork PRs do not receive secrets and use
   deploy:
     if: >
       github.event_name == 'pull_request' &&
