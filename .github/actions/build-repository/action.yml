@@ -64,6 +64,7 @@ runs:
       with:
         path: ${{ github.workspace }}
         build-tools-ref: ${{ github.repository == 'cloudscape-design/build-tools' && github.head_ref || '' }}
+        build-tools-repository: ${{ github.repository == 'cloudscape-design/build-tools' && github.event.pull_request.head.repo.full_name || '' }}
 
     - name: Unlock dependencies
       uses: cloudscape-design/actions/.github/actions/unlock-dependencies@main
