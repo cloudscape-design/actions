@@ -14,6 +14,13 @@ inputs:
       Set only when the dry-run source repository is build-tools; leave empty otherwise.
     required: false
     default: ''
+  build-tools-repository:
+    description: >-
+      Repository to install @cloudscape-design/build-tools from during a dry-run. Set it to the
+      pull request's head repository so that dry-runs of forked pull requests resolve, as their
+      branches only exist in the fork. Defaults to the upstream repository when empty.
+    required: false
+    default: 'cloudscape-design/build-tools'
 runs:
   using: 'node20'
   main: 'index.js'
