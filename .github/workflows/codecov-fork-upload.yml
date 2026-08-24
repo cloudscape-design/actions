@@ -1,0 +1,85 @@
+name: Codecov fork upload
+
+on:
+  # Codecov fork upload flow:
+  # 1. After reviewing the fork changes, a maintainer approves the pull_request workflow run.
+  # 2. The consumer's pull_request workflow calls the shared build-lint-test.yml workflow.
+  #    It runs without secrets and uploads the coverage artifact.
+  # 3. After the build succeeds, a workflow_run wrapper in the consuming repository calls this workflow.
+  # 4. This privileged workflow downloads the coverage data and uploads it to Codecov
+  #    without checking out or running fork code.
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: Artifact to download; contains the coverage report of the fork build
+        type: string
+        required: false
+        default: coverage-report
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  upload:
+    # `>-` (not `>`) so no trailing newline remains around the expression; with a trailing
+    # newline the condition would be treated as a non-empty string and always evaluate to true.
+    if: >-
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name != github.event.workflow_run.repository.full_name }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    # workflow_run loads this workflow from the default branch, so the fork cannot alter privileged steps.
+    # This job must never check out or execute fork code; it only uploads the coverage data
+    # produced by the build that ran without secrets. No checkout is needed because the commit
+    # identity is passed to Codecov explicitly via the override inputs below.
+    steps:
+      # Untrusted DATA only. The artifact belongs to the triggering build run, so fetch it using
+      # the run ID from the caller's workflow_run payload. Cross-run downloads require the token
+      # and actions: read.
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: coverage
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      # workflow_run has no pull request context for fork runs: both github.event.workflow_run.pull_requests
+      # and the commits/{sha}/pulls API return empty. Resolve the pull request by matching the open
+      # pull requests against the trusted head SHA instead.
+      - name: Resolve pull request from head SHA
+        id: pull-request
+        uses: actions/github-script@v7
+        env:
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        with:
+          script: |
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+            });
+
+            const pullRequest = pullRequests.find(p => p.head.sha === process.env.HEAD_SHA);
+            if (!pullRequest) {
+              core.setFailed(`No open pull request found for head SHA ${process.env.HEAD_SHA}`);
+              return;
+            }
+
+            core.setOutput('number', pullRequest.number);
+            // "owner:branch", which is the branch name Codecov itself uses for fork pull requests.
+            core.setOutput('branch', pullRequest.head.label);
+      # The commit identity comes from the trusted workflow_run event and the pull request API,
+      # never from the artifact, so a fork cannot attribute coverage to an arbitrary commit.
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
+          override_commit: ${{ github.event.workflow_run.head_sha }}
+          override_pr: ${{ steps.pull-request.outputs.number }}
+          override_branch: ${{ steps.pull-request.outputs.branch }}
+          # Verification landing: report what would be uploaded without mutating Codecov state.
+          # Remove once the flow is confirmed on a real fork pull request.
+          dry_run: true
