@@ -19,11 +19,14 @@ on:
 permissions:
   contents: read
   actions: read
+  # Required by the pull request resolver step below.
+  pull-requests: read
 
 jobs:
   upload:
-    # `>-` (not `>`) so no trailing newline remains around the expression; with a trailing
-    # newline the condition would be treated as a non-empty string and always evaluate to true.
+    # `>-` (not `>`) to satisfy actionlint's if-cond rule, which flags the trailing newline a
+    # folded `>` scalar leaves behind. GitHub trims that newline and evaluates either form as the
+    # same expression, so this is lint hygiene and not a change in behaviour.
     if: >-
       ${{ github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success' &&
@@ -46,27 +49,40 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
       # workflow_run has no pull request context for fork runs: both github.event.workflow_run.pull_requests
-      # and the commits/{sha}/pulls API return empty. Resolve the pull request by matching the open
-      # pull requests against the trusted head SHA instead.
+      # and the commits/{sha}/pulls API return empty. Resolve the pull request from the open pull
+      # requests instead, narrowed by the trusted head repository and branch. A pull request is a
+      # head/base pair, so the head SHA alone is not unique: one branch opened against two bases,
+      # or a fork of a fork, yields several open pull requests sharing it. Resolution therefore
+      # fails closed unless exactly one pull request matches.
       - name: Resolve pull request from head SHA
         id: pull-request
         uses: actions/github-script@v7
         env:
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         with:
           script: |
+            const headOwner = process.env.HEAD_REPOSITORY.split('/')[0];
+            const head = `${headOwner}:${process.env.HEAD_BRANCH}`;
+
             const pullRequests = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
+              head,
             });
 
-            const pullRequest = pullRequests.find(p => p.head.sha === process.env.HEAD_SHA);
-            if (!pullRequest) {
-              core.setFailed(`No open pull request found for head SHA ${process.env.HEAD_SHA}`);
+            const matches = pullRequests.filter(p => p.head.sha === process.env.HEAD_SHA);
+            if (matches.length !== 1) {
+              core.setFailed(
+                `Expected exactly one open pull request for head ${head} at ${process.env.HEAD_SHA}, ` +
+                  `found ${matches.length}${matches.length ? `: ${matches.map(p => `#${p.number}`).join(', ')}` : ''}`
+              );
               return;
             }
 
+            const [pullRequest] = matches;
             core.setOutput('number', pullRequest.number);
             // "owner:branch", which is the branch name Codecov itself uses for fork pull requests.
             core.setOutput('branch', pullRequest.head.label);
