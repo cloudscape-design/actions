@@ -80,6 +80,3 @@ jobs:
           override_commit: ${{ github.event.workflow_run.head_sha }}
           override_pr: ${{ steps.pull-request.outputs.number }}
           override_branch: ${{ steps.pull-request.outputs.branch }}
-          # Verification landing: report what would be uploaded without mutating Codecov state.
-          # Remove once the flow is confirmed on a real fork pull request.
-          dry_run: true
