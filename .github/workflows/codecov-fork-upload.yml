@@ -24,9 +24,6 @@ permissions:
 
 jobs:
   upload:
-    # `>-` (not `>`) to satisfy actionlint's if-cond rule, which flags the trailing newline a
-    # folded `>` scalar leaves behind. GitHub trims that newline and evaluates either form as the
-    # same expression, so this is lint hygiene and not a change in behaviour.
     if: >-
       ${{ github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success' &&
