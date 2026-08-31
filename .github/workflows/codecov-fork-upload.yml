@@ -7,7 +7,7 @@ on:
   #    It runs without secrets and uploads the coverage artifact.
   # 3. After the build succeeds, a workflow_run wrapper in the consuming repository calls this workflow.
   # 4. This privileged workflow downloads the coverage data and uploads it to Codecov
-  #    without checking out or running fork code.
+  #    without building or running fork code.
   workflow_call:
     inputs:
       artifact-name:
@@ -31,10 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     # workflow_run loads this workflow from the default branch, so the fork cannot alter privileged steps.
-    # This job must never check out or execute fork code; it only uploads the coverage data
-    # produced by the build that ran without secrets. No checkout is needed because the commit
-    # identity is passed to Codecov explicitly via the override inputs below.
+    # This job must never execute fork code; it only uploads the coverage data
+    # produced by the build that ran without secrets.
     steps:
+      # Codecov path-fixes against the source tree, so the report is unusable without it. Must run before the
+      # download, which checkout would otherwise wipe. Nothing here may be executed: no install, no build, no tests.
+      - name: Check out the fork commit for path fixing
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
       # Untrusted DATA only. The artifact belongs to the triggering build run, so fetch it using
       # the run ID from the caller's workflow_run payload. Cross-run downloads require the token
       # and actions: read.
