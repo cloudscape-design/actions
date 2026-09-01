@@ -156,10 +156,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
-          # components emits lcov.info, build-tools clover.xml; the action splits this on whitespace, not commas.
-          files: |
-            coverage/lcov.info
-            coverage/clover.xml
+          # components emits lcov.info, build-tools clover.xml; codecov.sh sets IFS=, so this must stay comma-separated.
+          files: coverage/lcov.info,coverage/clover.xml
           override_commit: ${{ github.event.workflow_run.head_sha }}
           override_pr: ${{ steps.pull-request.outputs.number }}
           override_branch: ${{ steps.pull-request.outputs.branch }}
