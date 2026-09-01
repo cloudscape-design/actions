@@ -87,6 +87,13 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
+      # Codecov resolves report paths against the repository file list; the privileged upload job has no checkout.
+      - name: Record the file network for fork upload
+        if: ${{ inputs.skip-codecov == false && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          if [ -d coverage ]; then
+            git ls-files -z > coverage/network
+          fi
       # Fork pull requests run without secrets, so they cannot upload to Codecov from here.
       # Only the coverage data is uploaded as an artifact; the separate "Codecov fork upload"
       # workflow (codecov-fork-upload.yml) submits it with the token and derives the commit

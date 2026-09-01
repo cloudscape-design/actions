@@ -7,7 +7,7 @@ on:
   #    It runs without secrets and uploads the coverage artifact.
   # 3. After the build succeeds, a workflow_run wrapper in the consuming repository calls this workflow.
   # 4. This privileged workflow downloads the coverage data and uploads it to Codecov
-  #    without building or running fork code.
+  #    without checking out or running fork code.
   workflow_call:
     inputs:
       artifact-name:
@@ -31,17 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     # workflow_run loads this workflow from the default branch, so the fork cannot alter privileged steps.
-    # This job must never execute fork code; it only uploads the coverage data
+    # This job must never check out or execute fork code; it only uploads the coverage data
     # produced by the build that ran without secrets.
     steps:
-      # Codecov path-fixes against the source tree, so the report is unusable without it. Must run before the
-      # download, which checkout would otherwise wipe. Nothing here may be executed: no install, no build, no tests.
-      - name: Check out the fork commit for path fixing
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
       # Untrusted DATA only. The artifact belongs to the triggering build run, so fetch it using
       # the run ID from the caller's workflow_run payload. Cross-run downloads require the token
       # and actions: read.
@@ -52,6 +44,72 @@ jobs:
           path: coverage
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
+      # Codecov resolves report paths against the repository file list, and this job has no checkout,
+      # so rebuild that list from the fork's own listing as empty files.
+      - name: Reconstruct the fork file network
+        id: network
+        env:
+          NETWORK_SRC: coverage/network
+        run: |
+          set -euo pipefail
+
+          if [ ! -f "$NETWORK_SRC" ] || { [ ! -f coverage/lcov.info ] && [ ! -f coverage/clover.xml ]; }; then
+            echo "::warning::Fork coverage artifact has no file network or no supported report; skipping upload."
+            exit 0
+          fi
+
+          if [ "$(wc -c <"$NETWORK_SRC")" -gt 8388608 ]; then
+            echo "::error::Fork file network exceeds 8 MiB."
+            exit 1
+          fi
+
+          git init -q .
+          validated=$(mktemp)
+          count=0
+
+          # The listing is fork-controlled data, so every path is validated before it is created.
+          # Anything unexpected fails this step, which skips the upload rather than sending a wrong network.
+          while IFS= read -r -d '' path; do
+            [ -n "$path" ] || continue
+            case $path in
+              /* | :* | *[[:cntrl:]]*) # a leading ':' would be read as git pathspec magic
+                echo "::error::Rejected unsafe path in fork file network."
+                exit 1
+                ;;
+            esac
+            case "/$path/" in
+              *//* | */./* | */../* | */.git/*)
+                echo "::error::Rejected unsafe path in fork file network."
+                exit 1
+                ;;
+            esac
+            # A fork that tracks its coverage directory would otherwise truncate the downloaded artifact.
+            case $path in
+              coverage | coverage/*) continue ;;
+            esac
+            if [ "${#path}" -gt 4096 ] || [ "$count" -ge 100000 ]; then
+              echo "::error::Fork file network exceeds size limits."
+              exit 1
+            fi
+            count=$((count + 1))
+            mkdir -p -- "$(dirname -- "$path")"
+            : >"$path"
+            printf '%s\0' "$path" >>"$validated"
+          done <"$NETWORK_SRC"
+
+          if [ "$count" -eq 0 ]; then
+            echo "::error::Fork file network is empty."
+            exit 1
+          fi
+
+          # git ls-files reads the index, so the placeholders have to be staged to be visible.
+          git add -N --pathspec-from-file="$validated" --pathspec-file-nul
+          if [ "$(git ls-files -z | tr -dc '\0' | wc -c)" -ne "$count" ]; then
+            echo "::error::Reconstructed file network does not match the accepted paths."
+            exit 1
+          fi
+
+          echo "ready=true" >>"$GITHUB_OUTPUT"
       # workflow_run has no pull request context for fork runs: both github.event.workflow_run.pull_requests
       # and the commits/{sha}/pulls API return empty. Resolve the pull request from the open pull
       # requests instead, narrowed by the trusted head repository and branch. A pull request is a
@@ -93,10 +151,15 @@ jobs:
       # The commit identity comes from the trusted workflow_run event and the pull request API,
       # never from the artifact, so a fork cannot attribute coverage to an arbitrary commit.
       - name: Upload coverage to Codecov
+        if: ${{ steps.network.outputs.ready == 'true' }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: coverage
+          disable_search: true
+          # components emits lcov.info, build-tools clover.xml; the action splits this on whitespace, not commas.
+          files: |
+            coverage/lcov.info
+            coverage/clover.xml
           override_commit: ${{ github.event.workflow_run.head_sha }}
           override_pr: ${{ steps.pull-request.outputs.number }}
           override_branch: ${{ steps.pull-request.outputs.branch }}
