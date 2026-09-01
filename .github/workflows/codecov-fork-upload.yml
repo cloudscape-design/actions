@@ -83,6 +83,10 @@ jobs:
                 exit 1
                 ;;
             esac
+            # A fork that tracks its coverage directory would otherwise truncate the downloaded artifact.
+            case $path in
+              coverage | coverage/*) continue ;;
+            esac
             if [ "${#path}" -gt 4096 ] || [ "$count" -ge 100000 ]; then
               echo "::error::Fork file network exceeds size limits."
               exit 1
