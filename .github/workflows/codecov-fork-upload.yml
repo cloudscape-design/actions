@@ -50,12 +50,11 @@ jobs:
         id: network
         env:
           NETWORK_SRC: coverage/network
-          REPORT: coverage/lcov.info
         run: |
           set -euo pipefail
 
-          if [ ! -f "$NETWORK_SRC" ] || [ ! -f "$REPORT" ]; then
-            echo "::warning::Fork coverage artifact has no file network or no lcov.info; skipping upload."
+          if [ ! -f "$NETWORK_SRC" ] || { [ ! -f coverage/lcov.info ] && [ ! -f coverage/clover.xml ]; }; then
+            echo "::warning::Fork coverage artifact has no file network or no supported report; skipping upload."
             exit 0
           fi
 
@@ -153,7 +152,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
-          files: coverage/lcov.info
+          # components emits lcov.info, build-tools clover.xml; the action splits this on whitespace, not commas.
+          files: |
+            coverage/lcov.info
+            coverage/clover.xml
           override_commit: ${{ github.event.workflow_run.head_sha }}
           override_pr: ${{ steps.pull-request.outputs.number }}
           override_branch: ${{ steps.pull-request.outputs.branch }}
