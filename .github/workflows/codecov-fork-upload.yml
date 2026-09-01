@@ -92,7 +92,7 @@ jobs:
               exit 1
             fi
             count=$((count + 1))
-            mkdir -p "$(dirname "$path")"
+            mkdir -p -- "$(dirname -- "$path")"
             : >"$path"
             printf '%s\0' "$path" >>"$validated"
           done <"$NETWORK_SRC"
