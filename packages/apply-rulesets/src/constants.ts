@@ -13,6 +13,11 @@ export const BASIC_CHECKS = ['build / build', 'build / codeql', 'build / git-sec
 export const CODECOV_CHECKS = ['codecov/patch', 'codecov/project'];
 
 /*
+ * Checks that are applied specifically to the `components` repository.
+ */
+export const COMPONENTS_CHECKS = ['Visual regression result'];
+
+/*
  * Checks that are applied to repositories specified in `DRY_RUN_REPOS` constant.
  */
 export const DRY_RUN_CHECKS = [
@@ -64,6 +69,12 @@ export const CODECOV_REPOS: CloudscapeRepo[] = [
   'documenter',
   'theming-core',
 ];
+
+/**
+ * Repositories that `COMPONENTS_CHECKS` will be applied to.
+ * These checks will be applied in addition to the `BASIC_CHECKS`.
+ */
+export const COMPONENTS_REPOS: CloudscapeRepo[] = ['components'];
 
 /*
  * Repositories that `DRY_RUN_CHECKS` will be applied to.

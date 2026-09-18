@@ -115,6 +115,41 @@ exports[`applyRulesets > applies all of the rulesets 1`] = `
         "repository_name": {
           "exclude": [],
           "include": [
+            "components",
+          ],
+        },
+      },
+      "enforcement": "active",
+      "name": "Components rulesets",
+      "org": "cloudscape-design",
+      "rules": [
+        {
+          "parameters": {
+            "required_status_checks": [
+              {
+                "context": "Visual regression result",
+              },
+            ],
+            "strict_required_status_checks_policy": true,
+          },
+          "type": "required_status_checks",
+        },
+      ],
+      "target": "branch",
+    },
+  ],
+  [
+    {
+      "conditions": {
+        "ref_name": {
+          "exclude": [],
+          "include": [
+            "~DEFAULT_BRANCH",
+          ],
+        },
+        "repository_name": {
+          "exclude": [],
+          "include": [
             "board-components",
             "browser-test-tools",
             "build-tools",

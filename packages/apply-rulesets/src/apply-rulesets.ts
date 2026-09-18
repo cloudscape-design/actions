@@ -2,6 +2,8 @@ import {
   BASIC_CHECKS,
   CODECOV_CHECKS,
   CODECOV_REPOS,
+  COMPONENTS_CHECKS,
+  COMPONENTS_REPOS,
   DRY_RUN_CHECKS,
   DRY_RUN_REPOS,
   MERGE_QUEUE_REPOS,
@@ -48,6 +50,21 @@ export async function applyRulesets() {
         parameters: {
           strict_required_status_checks_policy: true,
           required_status_checks: CODECOV_CHECKS.map(context => ({ context })),
+        },
+      },
+    ],
+  });
+
+  await createOrUpdateRuleset({
+    name: 'Components rulesets',
+    level: 'org',
+    repos: COMPONENTS_REPOS,
+    rules: [
+      {
+        type: 'required_status_checks',
+        parameters: {
+          strict_required_status_checks_policy: true,
+          required_status_checks: COMPONENTS_CHECKS.map(context => ({ context })),
         },
       },
     ],
