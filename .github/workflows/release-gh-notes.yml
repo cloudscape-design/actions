@@ -17,13 +17,13 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-
+    # Dedicated billed Cloudscape runner group. Only use for high-priority workflows.
+    runs-on: cloudscape-priority-4-core
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.commit }}
+          ref: ${{ inputs.commit }}
           fetch-depth: 0
       - name: Replace version in package.json
         run: |
@@ -31,12 +31,12 @@ jobs:
           echo -E "${package_json}" > package.json && \
           cat package.json
         env:
-          VERSION: ${{ github.event.inputs.version }}
+          VERSION: ${{ inputs.version }}
       - name: Generate changelog
         run: npx conventional-changelog-cli@2 -i CHANGELOG.md -s -p conventionalcommits
       - name: Get number of lines in CHANGELOG.md
         id: changelog
-        run: echo "changelog_lines=$(wc -l < "CHANGELOG.md" | sed  s/\ //g)" >> $GITHUB_OUTPUT
+        run: echo "changelog_lines=$(wc -l < "CHANGELOG.md" | sed s/\ //g)" >> $GITHUB_OUTPUT
         shell: bash
       - name: Add empty release note
         run: echo "No customer visible changes in this release" >> CHANGELOG.md
@@ -45,5 +45,5 @@ jobs:
         run: gh release create "$VERSION" -F CHANGELOG.md --target "$COMMIT" --title "Release $VERSION"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.event.inputs.version }}
-          COMMIT: ${{ github.event.inputs.commit }}
+          VERSION: ${{ inputs.version }}
+          COMMIT: ${{ inputs.commit }}
