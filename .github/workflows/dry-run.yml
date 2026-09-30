@@ -268,6 +268,7 @@ jobs:
 
   integTestShards:
     name: Components integration tests shards (React ${{ matrix.react }}, shard ${{ matrix.shard }})
+    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -302,6 +303,7 @@ jobs:
 
   motionTest:
     name: Components motion tests (React ${{ matrix.react }})
+    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -334,6 +336,7 @@ jobs:
 
   a11yTestShards:
     name: Components accessibility tests shards
+    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
