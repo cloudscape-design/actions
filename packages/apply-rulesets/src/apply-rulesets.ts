@@ -98,7 +98,7 @@ export async function applyRulesets() {
           min_entries_to_merge: 1,
           min_entries_to_merge_wait_minutes: 5,
           max_entries_to_merge: 1,
-          check_response_timeout_minutes: 60,
+          check_response_timeout_minutes: 120,
           grouping_strategy: 'ALLGREEN',
         },
       },
