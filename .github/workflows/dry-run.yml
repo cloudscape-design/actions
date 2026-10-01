@@ -268,7 +268,6 @@ jobs:
 
   integTestShards:
     name: Components integration tests shards (React ${{ matrix.react }}, shard ${{ matrix.shard }})
-    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -289,7 +288,7 @@ jobs:
       - buildComponentToolkit
     steps:
       - name: Build components package
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
@@ -298,12 +297,11 @@ jobs:
           skip-build-artifact: true
           force-visual-refresh: false
       - name: Integration tests
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         run: npm run test:integ -- --shard=${{ matrix.shard }} --reactVersion=${{ matrix.react }}
 
   motionTest:
     name: Components motion tests (React ${{ matrix.react }})
-    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -322,7 +320,7 @@ jobs:
       - buildComponentToolkit
     steps:
       - name: Build components package
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
@@ -331,12 +329,11 @@ jobs:
           skip-build-artifact: true
           force-visual-refresh: false
       - name: Motion tests
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         run: npm run test:motion -- --reactVersion=${{ matrix.react }}
 
   a11yTestShards:
     name: Components accessibility tests shards
-    if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -355,7 +352,7 @@ jobs:
       - buildComponentToolkit
     steps:
       - name: Build components package
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         uses: cloudscape-design/actions/.github/actions/build-repository@main
         with:
           repository: cloudscape-design/components
@@ -363,7 +360,7 @@ jobs:
           skip-build-artifact: true
           force-visual-refresh: false
       - name: Accessibility tests
-        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') }}
+        if: ${{ contains(needs.createBuildTree.outputs.repositories, 'cloudscape-design/components') && github.event_name != 'merge_group' }}
         run: npm run test:a11y -- --shard=${{ matrix.shard }}
 
   integTest:
